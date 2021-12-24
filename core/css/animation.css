@@ -1,0 +1,623 @@
+/* 
+  Animation 微动画  
+  
+ */
+
+/* css 滤镜 控制黑白底色gif的 */
+.gif-black{  
+  mix-blend-mode: screen;  
+}
+.gif-white{  
+  mix-blend-mode: multiply; 
+}
+:root {
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1;
+}
+
+/* Animation css */
+[class*=animation-] {
+    animation-duration: .6s;
+    animation-timing-function: ease;
+    animation-fill-mode: both
+}
+ 
+.animation-duration-03 {
+	 animation-duration: .3s;
+}
+
+.animation-fade {
+    animation-name: fade;
+    animation-duration: .8s;
+    animation-timing-function: linear
+}
+
+.animation-scale-up {
+    animation-name: scale-up
+}
+
+.animation-scale-down {
+    animation-name: scale-down
+}
+
+.animation-slide-top {
+    animation-name: slide-top
+}
+
+.animation-slide-bottom {
+    animation-name: slide-bottom
+}
+
+.animation-slide-left {
+    animation-name: slide-left
+}
+
+.animation-slide-right {
+    animation-name: slide-right
+}
+
+.animation-shake {
+    animation-name: shake
+}
+
+.animation-reverse {
+    animation-direction: reverse
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+@keyframes scale-up {
+    0% {
+        opacity: 0;
+        transform: scale(.2)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes scale-down {
+    0% {
+        opacity: 0;
+        transform: scale(1.8)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes slide-top {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%)
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@keyframes slide-bottom {
+    0% {
+        opacity: 0;
+        transform: translateY(100%)
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@keyframes shake {
+
+  0%,
+    100% {
+        transform: translateX(0)
+    }
+
+    10% {
+        transform: translateX(-9px)
+    }
+
+    20% {
+        transform: translateX(8px)
+    }
+
+    30% {
+        transform: translateX(-7px)
+    }
+
+    40% {
+        transform: translateX(6px)
+    }
+
+    50% {
+        transform: translateX(-5px)
+    }
+
+    60% {
+        transform: translateX(4px)
+    }
+
+    70% {
+        transform: translateX(-3px)
+    }
+
+    80% {
+        transform: translateX(2px)
+    }
+
+    90% {
+        transform: translateX(-1px)
+    }
+}
+
+@keyframes slide-left {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%)
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0)
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        opacity: 0;
+        transform: translateX(100%)
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0)
+    }
+}
+
+
+.animation-rubberBand {
+    animation-direction: rubberBand
+}
+.animation-bounceOut {
+  animation-duration: calc(1s * 0.75);
+  animation-duration: calc(var(--animate-duration) * 0.75);
+  animation-name: bounceOut;
+}
+.animation-fadeOutDown {
+	animation-name: fadeOutDown;
+}
+.animation-fadeOutUp {
+   animation-name: fadeOutUp;
+}
+.animation-flash {
+   animation-name: flash;
+}
+.animation-ring {
+   animation-name: ring;
+}
+/* add */
+/* 胶带动画 */
+@keyframes rubberBand {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+/* 弹跳 */
+@keyframes bounceOut {
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  50%,
+  55% {
+    opacity: 1;
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+}
+/* 下淡出 */
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/* 上淡出 */
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+/* 淡入 */
+.animation-fadein{animation-name:fadein;}
+/* 淡入-从上 */
+.animation-fadeinT{animation-name:fadeinT;}
+/* 淡入-从右 */
+.animation-fadeinR{animation-name:fadeinR;}
+/* 淡入-从下 */
+.animation-fadeinB{animation-name:fadeinB;}
+/* 淡入-从左 */
+.animation-fadeinL{animation-name:fadeinL;}
+/* 淡出 */
+.animation-fadeout{animation-name:fadeout;}
+/* 淡出-向上 */
+.animation-fadeoutT{animation-name:fadeoutT;}
+/* 淡出-向右 */
+.animation-fadeoutR{animation-name:fadeoutR;}
+/* 淡出-向下 */
+.animation-fadeoutB{animation-name:fadeoutB;}
+/* 淡出-向左 */
+.animation-fadeoutL{animation-name:fadeoutL;}
+/* 弹跳 */
+.animation-bounce{animation-name:bounce;}
+/* 弹入 */
+.animation-bouncein{animation-name:bouncein;}
+/* 弹入-从上 */
+.animation-bounceinT{animation-name:bounceinT;}
+/* 弹入-从右 */
+.animation-bounceinR{animation-name:bounceinR;}
+/* 弹入-从下 */
+.animation-bounceinB{animation-name:bounceinB;}
+/* 弹入-从左 */
+.animation-bounceinL{animation-name:bounceinL;}
+/* 弹出 */
+.animation-bounceout{animation-name:bounceout;}
+/* 弹出-向上 */
+.animation-bounceoutT{animation-name:bounceoutT;}
+/* 弹出-向右 */
+.animation-bounceoutR{animation-name:bounceoutR;}
+/* 弹出-向下 */
+.animation-bounceoutB{animation-name:bounceoutB;}
+/* 弹出-向左 */
+.animation-bounceoutL{animation-name:bounceoutL;}
+/* 转入 */
+.animation-rotatein{animation-name:rotatein;}
+/* 转入-从左上 */
+.animation-rotateinLT{animation-name:rotateinLT;}
+/* 转入-从左下 */
+.animation-rotateinLB{animation-name:rotateinLB;}
+/* 转入-从右上 */
+.animation-rotateinRT{animation-name:rotateinRT;}
+/* 转入-从右下*/
+.animation-rotateinRB{animation-name:rotateinRB;}
+/* 转出 */
+.animation-rotateout{animation-name:rotateout;}
+/* 转出-向左上 */
+.animation-rotateoutLT{animation-name:rotateoutLT;}
+/* 转出-向左下 */
+.animation-rotateoutLB{animation-name:rotateoutLB;}
+/* 转出-向右上 */
+.animation-rotateoutRT{animation-name:rotateoutRT;}
+/* 转出-向右下 */
+.animation-rotateoutRB{animation-name:rotateoutRB;}
+/* 翻转 */
+.animation-flip{animation-name:flip;}
+/* 翻入-X轴 */
+.animation-flipinX{animation-name:flipinX;}
+/* 翻入-Y轴 */
+.animation-flipin,.animation-flipinY{animation-name:flipinY;}
+/* 翻出-X轴 */
+.animation-flipoutX{animation-name:flipoutX;}
+/* 翻出-Y轴 */
+.animation-flipout,.animation-flipoutY{animation-name:flipoutY;}
+/* 闪烁 */
+.animation-flash{animation-name:flash;}
+/* 震颤 */
+.animation-shake2{animation-name:shake2;}
+/* 摇摆 */
+.animation-swing{animation-name:swing;}
+/* 摇晃 */
+.animation-wobble{animation-name:wobble;}
+/* 震铃 */
+.animation-ring{animation-name:ring;}
+/* define */
+/* 淡入 */
+@-webkit-keyframes fadein{
+    0%{opacity:0;}
+    100%{opacity:1;}
+}
+@-moz-keyframes fadein{
+    0%{opacity:0;}
+    100%{opacity:1;}
+}
+@-ms-keyframes fadein{
+    0%{opacity:0;}
+    100%{opacity:1;}
+}
+@keyframes fadein{
+    0%{opacity:0;}
+    100%{opacity:1;}
+}
+/* 淡入-从上 */
+@keyframes fadeinT{
+    0%{opacity:0;transform:translateY(-100px);}
+    100%{opacity:1;transform:translateY(0);}
+}
+/* 淡入-从右 */
+@keyframes fadeinR{
+    0%{opacity:0;transform:translateX(100px);}
+    100%{opacity:1;transform:translateX(0);}
+}
+/* 淡入-从下 */
+@keyframes fadeinB{
+    0%{opacity:0;transform:translateY(100px);}
+    100%{opacity:1;transform:translateY(0);}
+}
+/* 淡入-从左 */
+@keyframes fadeinL{
+    0%{opacity:0;transform:translateX(-100px);}
+    100%{opacity:1;transform:translateX(0);}
+}
+/* 淡出 */
+@keyframes fadeout{
+    0%{opacity:1;}
+    100%{opacity:0;}
+}
+/* 淡出-向上 */
+@keyframes fadeoutT{
+    0%{opacity:1;transform:translateY(0);}
+    100%{opacity:0;transform:translateY(-100px);}
+}
+/* 淡出-向右 */
+@keyframes fadeoutR{
+    0%{opacity:1;transform:translateX(0);}
+    100%{opacity:0;transform:translateX(100px);}
+}
+/* 淡出-向下 */
+@keyframes fadeoutB{
+    0%{opacity:1;transform:translateY(0);}
+    100%{opacity:0;transform:translateY(100px);}
+}
+/* 淡出-向左 */
+@keyframes fadeoutL{
+    0%{opacity:1;transform:translateX(0);}
+    100%{opacity:0;transform:translateX(-100px);}
+}
+/* 弹跳 */
+@keyframes bounce{
+    0%,20%,50%,80%,100%{transform:translateY(0);}
+    40%{transform:translateY(-30px);}
+    60%{transform:translateY(-15px);}
+}
+/* 弹入 */
+@keyframes bouncein{
+    0%{opacity:0;transform:scale(0.3);}
+    50%{opacity:1;transform:scale(1.05);}
+    70%{transform:scale(0.9);}
+    100%{transform:scale(1);}
+}
+/* 弹入-从上 */
+@keyframes bounceinT{
+    0%{opacity:0;transform:translateY(-100px);}
+    60%{opacity:1;transform:translateY(30px);}
+    80%{transform:translateY(-10px);}
+    100%{transform:translateY(0);}
+}
+/* 弹入-从右 */
+@keyframes bounceinR{
+    0%{opacity:0;transform:translateX(100px);}
+    60%{opacity:1;transform:translateX(-30px);}
+    80%{transform:translateX(10px);}
+    100%{transform:translateX(0);}
+}
+/* 弹入-从下 */
+@keyframes bounceinB{
+    0%{opacity:0;transform:translateY(100px);}
+    60%{opacity:1;transform:translateY(-30px);}
+    80%{transform:translateY(10px);}
+    100%{transform:translateY(0);}
+}
+/* 弹入-从左 */
+@keyframes bounceinL{
+    0%{opacity:0;transform:translateX(-100px);}
+    60%{opacity:1;transform:translateX(30px);}
+    80%{transform:translateX(-10px);}
+    100%{transform:translateX(0);}
+}
+/* 弹出 */
+@keyframes bounceout{
+    0%{transform:scale(1);}
+    25%{transform:scale(0.95);}
+    50%{opacity:1;transform:scale(1.1);}
+    100%{opacity:0;transform:scale(0.3);}
+}
+/* 弹出-向上*/
+@keyframes bounceoutT{
+    0%{transform:translateY(0);}
+    20%{opacity:1;transform:translateY(20px);}
+    100%{opacity:0;transform:translateY(-100px);}
+}
+/* 弹出-向右*/
+@keyframes bounceoutR{
+    0%{transform:translateX(0);}
+    20%{opacity:1;transform:translateX(-20px);}
+    100%{opacity:0;transform:translateX(100px);}
+}
+/* 弹出-向下 */
+@keyframes bounceoutB{
+    0%{transform:translateY(0);}
+    20%{opacity:1;transform:translateY(-20px);}
+    100%{opacity:0;transform:translateY(100px);}
+}
+/* 弹出-向左 */
+@keyframes bounceoutL{
+    0%{transform:translateX(0);}
+    20%{opacity:1;transform:translateX(20px);}
+    100%{opacity:0;transform:translateX(-200px);}
+}
+/* 转入 */
+@keyframes rotatein{
+    0%{opacity:0;transform:rotate(-200deg);}
+    100%{opacity:1;transform:rotate(0);}
+}
+/* 转入-从左上 */
+@keyframes rotateinLT{
+    0%{transform-origin:left bottom;transform:rotate(-90deg);opacity:0;}
+    100%{transform-origin:left bottom;transform:rotate(0);opacity:1;}
+}
+/* 转入-从左下 */
+@keyframes rotateinLB{
+    0%{transform-origin:left bottom;transform:rotate(90deg);opacity:0;}
+    100%{transform-origin:left bottom;transform:rotate(0);opacity:1;}
+}
+/* 转入-从右上 */
+@keyframes rotateinRT{
+    0%{transform-origin:right bottom;transform:rotate(90deg);opacity:0;}
+    100%{transform-origin:right bottom;transform:rotate(0);opacity:1;}
+}
+/* 转入-从右下*/
+@keyframes rotateinRB{
+    0%{transform-origin:right bottom;transform:rotate(-90deg);opacity:0;}
+    100%{transform-origin:right bottom;transform:rotate(0);opacity:1;}
+}
+/* 转出 */
+@keyframes rotateout{
+    0%{transform-origin:center center;transform:rotate(0);opacity:1;}
+    100%{transform-origin:center center;transform:rotate(200deg);opacity:0;}
+}
+/* 转出-向左上 */
+@keyframes rotateoutLT{
+    0%{transform-origin:left bottom;transform:rotate(0);opacity:1;}
+    100%{transform-origin:left bottom;transform:rotate(-90deg);opacity:0;}
+}
+/* 转出-向左下 */
+@keyframes rotateoutLB{
+    0%{transform-origin:left bottom;transform:rotate(0);opacity:1;}
+    100%{transform-origin:left bottom;transform:rotate(90deg);opacity:0;}
+}
+/* 转出-向右上 */
+@keyframes rotateoutRT{
+    0%{transform-origin:right bottom;transform:rotate(0);opacity:1;}
+    100%{transform-origin:right bottom;transform:rotate(90deg);opacity:0;}
+}
+/* 转出-向右下 */
+@keyframes rotateoutRB{
+    0%{transform-origin:right bottom;transform:rotate(0);opacity:1;}
+    100%{transform-origin:right bottom;transform:rotate(-90deg);opacity:0;}
+}
+/* 翻转 */
+@keyframes flip{
+    0%{transform:perspective(400px) rotateY(0);animation-timing-function:ease-out;}
+    40%{transform:perspective(400px) translateZ(150px) rotateY(170deg);animation-timing-function:ease-out;}
+    50%{transform:perspective(400px) translateZ(150px) rotateY(190deg) scale(1);animation-timing-function:ease-in;}
+    80%{transform:perspective(400px) rotateY(360deg) scale(0.95);animation-timing-function:ease-in;}
+    100%{transform:perspective(400px) scale(1);animation-timing-function:ease-in;}
+}
+/* 翻入-X轴 */
+@keyframes flipinX{
+    0%{transform:perspective(400px) rotateX(90deg);opacity:0;}
+    40%{transform:perspective(400px) rotateX(-10deg);}
+    70%{transform:perspective(400px) rotateX(10deg);}
+    100%{transform:perspective(400px) rotateX(0);opacity:1;}
+}
+/* 翻入-Y轴 */
+@keyframes flipinY{
+    0%{transform:perspective(400px) rotateY(90deg);opacity:0;}
+    40%{transform:perspective(400px) rotateY(-10deg);}
+    70%{transform:perspective(400px) rotateY(10deg);}
+    100%{transform:perspective(400px) rotateY(0);opacity:1;}
+}
+/* 翻出-X轴 */
+@keyframes flipoutX{
+    0%{transform:perspective(400px) rotateX(0);opacity:1;}
+    100%{transform:perspective(400px) rotateX(90deg);opacity:0;}
+}
+/* 翻出-Y轴 */
+@keyframes flipoutY{
+    0%{transform:perspective(400px) rotateY(0);opacity:1;}
+    100%{transform:perspective(400px) rotateY(90deg);opacity:0;}
+}
+/* 闪烁 */
+@keyframes flash{
+    0%,50%,100%{opacity:1;}
+    25%,75%{opacity:0;}
+}
+/* 震颤 */
+@keyframes shake2{
+    0%,100%{transform:translateX(-50%);}
+    10%,30%,50%,70%,90%{transform:translateX(-46%);}
+    20%,40%,60%,80%{transform:translateX(-54%);}
+}
+/* 摇摆 */
+@keyframes swing{
+    20%{transform:rotate(15deg);}
+    40%{transform:rotate(-10deg);}
+    60%{transform:rotate(5deg);}
+    80%{transform:rotate(-5deg);}
+    100%{transform:rotate(0);}
+}
+/* 摇晃 */
+@keyframes wobble{
+    0%{transform:translateX(0);}
+    15%{transform:translateX(-100px) rotate(-5deg);}
+    30%{transform:translateX(80px) rotate(3deg);}
+    45%{transform:translateX(-65px) rotate(-3deg);}
+    60%{transform:translateX(40px) rotate(2deg);}
+    75%{transform:translateX(-20px) rotate(-1deg);}
+    100%{transform:translateX(0);}
+}
+/* 震铃 */
+@keyframes ring{
+    0%{transform:scale(1);}
+    10%,20%{transform:scale(0.9) rotate(-3deg);}
+    30%,50%,70%,90%{transform:scale(1.1) rotate(3deg);}
+    40%,60%,80%{transform:scale(1.1) rotate(-3deg);}
+    100%{transform:scale(1) rotate(0);}
+}

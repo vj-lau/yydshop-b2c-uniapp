@@ -1,0 +1,136 @@
+<template>
+	<view class="guide">
+		<swiper
+			class="flex1"
+			interval="1000"
+			:indicator-dots="true"
+			:show-indicators="true"
+			:autoplay="autoPlay"
+			@change="sliderChange"
+			:infinite="false"
+			:forbid-slide-animation="false"
+		>
+			<swiper-item class="flex1" v-for="(img, index) in imageList" :key="index">
+				<view class="flex1" @click="launchAppIndex">
+					<!-- #ifndef APP-PLUS -->
+					<image class="flex1" mode="aspectFill" :style="{ width: screenWidth + 'px' }" :src="img" />
+
+					<!-- #endif -->
+
+					<!-- #ifdef APP-PLUS -->
+					<image class="flex1" resize="aspectFill" :src="img" />
+					<!-- #endif -->
+				</view>
+			</swiper-item>
+		</swiper>
+		<view class="swiper-to-home" @click="launchApp">
+			<text class="swiper-to-home-text">{{ time }}S</text>
+		</view>
+	</view>
+</template>
+
+<script>
+const SystemInfo = uni.getSystemInfoSync();
+import { mapState, mapMutations } from 'vuex';
+export default {
+	data() {
+		return {
+			imageList: [],
+			autoPlay: true,
+			currIndex: 0,
+			screenWidth: SystemInfo.screenWidth,
+			time: 0
+		};
+	},
+	onLoad() {
+		this.imageList = this.shopSetting.style_attention_app_guide;
+		this.time = this.imageList.length;
+		this.isTime();
+	},
+	computed: {
+		...mapState(['shopSetting'])
+	},
+	methods: {
+		...mapMutations(['setIsGuide']),
+		isTime() {
+			var countDown = setInterval(() => {
+				if (this.time == 0) {
+					clearInterval(countDown);
+					this.launchApp();
+					return;
+				}
+				this.time--;
+			}, 1000);
+		},
+		sliderChange(e) {
+			this.currIndex = e.detail.current;
+			if (this.imageList.length == this.currIndex + 1 && this.time == 0) {
+				this.autoPlay = false;
+				this.launchApp();
+			}
+		},
+		launchAppIndex() {
+			if (this.imageList.length == this.currIndex + 1) {
+				this.launchApp();
+			} else {
+				return;
+			}
+		},
+		launchApp() {
+			this.setIsGuide(false);
+			uni.navigateBack();
+		}
+	}
+};
+</script>
+<style scoped>
+.guide {
+	/* #ifndef APP-PLUS */
+	display: flex;
+	height: 100%;
+	/* #endif */
+	flex-direction: column;
+	flex: 1;
+}
+
+.flex1 {
+	flex: 1;
+}
+.swiper-to-home {
+	position: absolute;
+	z-index: 999;
+	right: 40rpx;
+	/* #ifndef MP */
+	top: 80rpx;
+	/* #endif */
+	/* #ifdef MP */
+	top: 150rpx;
+	/* #endif */
+}
+
+.swiper-to-home-text {
+	color: #ffffff;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-width: 1rpx;
+	border-color: #ffffff;
+	border-style: solid;
+	border-radius: 30rpx;
+	font-size: 28rpx;
+	padding-top: 10rpx;
+	padding-bottom: 10rpx;
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+}
+
+.indicator {
+	width: 714rpx;
+	height: 30rpx;
+	position: absolute;
+	bottom: 50rpx;
+	left: 1rpx;
+	item-color: #f6f6f6;
+	item-selected-color: #fd575c;
+	item-size: 20rpx;
+}
+</style>

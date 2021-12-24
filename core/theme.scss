@@ -1,0 +1,49 @@
+// 此文件为主题变量，这些变量目前只能通过uni.scss引入才有效，另外由于
+// uni.scss中引入的样式会同时混入到全局样式文件和单独每一个页面的样式中，造成微信程序包太大，
+// 故uni.scss只建议放scss变量名相关样式，其他的样式可以通过main.js或者App.vue引入
+
+//页面背景色
+$dz-bg-color: #f3f3f3;
+
+//文字颜色
+$dz-main-color: #303133;
+$dz-content-color: #606266;
+$dz-tips-color: #909399;
+$dz-light-color: #c0c4cc;
+
+//边框色
+$dz-border-color: #e4e7ed;
+
+//主色调
+$dz-type-primary: #2979ff;
+$dz-type-primary-disabled: #a0cfff;
+$dz-type-primary-light: #ecf5ff;
+$dz-type-primary-dark: #2b85e4;
+
+//warning
+$dz-type-warning: #FFC43F;
+$dz-type-warning-disabled: #fcbd71;
+$dz-type-warning-dark: #f29100;
+$dz-type-warning-light: #fdf6ec;
+
+//success
+$dz-type-success: #67C23A;
+$dz-type-success-disabled: #71d5a1;
+$dz-type-success-dark: #18b566;
+$dz-type-success-light: #dbf1e1;
+
+//error
+$dz-type-error: #fa3534;
+$dz-type-error-disabled: #fab6b6;
+$dz-type-error-dark: #dd6161;
+$dz-type-error-light: #fef0f0;
+
+//info
+$dz-type-info: #909399;
+$dz-type-info-disabled: #c8c9cc;
+$dz-type-info-dark: #82848a;
+$dz-type-info-light: #f4f4f5;
+
+//表单
+$dz-form-item-height: 70rpx;
+$dz-form-item-border-color: #dcdfe6;

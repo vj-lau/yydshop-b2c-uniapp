@@ -1,0 +1,221 @@
+page {
+	background-color: $dz-bg-color;
+	// font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+	font-family:"Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+
+}
+
+.dz-inline-block {
+	display: inline-block;
+}
+.dz-relative,
+.dz-rela {
+	position: relative;
+}
+
+.dz-absolute,
+.dz-abso {
+	position: absolute;
+}
+
+// nvue不能用标签命名样式，不能放在微信组件中，否则微信开发工具会报警告，无法使用标签名当做选择器
+/* #ifndef APP-NVUE */
+image {
+	display: inline-block;
+}
+
+// 在weex，也即nvue中，所有元素默认为border-box
+view,
+text {
+	box-sizing: border-box;
+}
+/* #endif */
+
+.dz-font-xs {
+	font-size: 22rpx;
+}
+
+.dz-font-sm {
+	font-size: 26rpx;
+}
+
+.dz-font-md {
+	font-size: 28rpx;
+}
+
+.dz-font-lg {
+	font-size: 30rpx;
+}
+
+.dz-font-xl {
+	font-size: 34rpx;
+}
+
+.dz-font-price::before {
+	content: "¥";
+	margin-right: 4rpx;
+}
+
+.dz-font-weight-light {
+	font-weight: 500;
+}
+
+.dz-font-weight {
+	font-weight: bold;
+}
+
+.dz-flex {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: row;
+	align-items: center;
+}
+
+.dz-flex-wrap {
+	flex-wrap: wrap;
+}
+
+.dz-flex-nowrap {
+	flex-wrap: nowrap;
+}
+
+.dz-col-center {
+	align-items: center;
+}
+
+.dz-col-top {
+	align-items: flex-start;
+}
+
+.dz-col-bottom {
+	align-items: flex-end;
+}
+
+.dz-row-center {
+	justify-content: center;
+}
+
+.dz-row-left {
+	justify-content: flex-start;
+}
+
+.dz-row-right {
+	justify-content: flex-end;
+}
+
+.dz-row-between {
+	justify-content: space-between;
+}
+
+.dz-row-around {
+	justify-content: space-around;
+}
+.dz-flex-column{
+	flex-direction: column;
+}
+.dz-text-left {
+	text-align: left;
+}
+
+.dz-text-center {
+	text-align: center;
+}
+
+.dz-text-right {
+	text-align: right;
+}
+
+.dz-box-shadow {
+	box-shadow: 0upx 5rpx 25rpx rgba(0, 0, 0, 0.05);
+}
+
+.dz-text-underline {
+	text-decoration: underline;
+}
+
+.dz-ios-p-bline {
+	padding-bottom: env(safe-area-inset-bottom);
+}
+.dz-ios-m-bline {
+	margin-bottom: env(safe-area-inset-bottom);
+}
+
+.dz-color-3 {
+	color: #333;
+}
+.dz-color-6 {
+	color: #666!important;
+}
+.dz-color-9 {
+	color: #999!important;
+}
+
+.dz-flex-col {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: column;
+}
+
+// 定义flex等分
+@for $i from 0 through 12 {
+	.dz-flex-#{$i} {
+		flex: $i;
+	}
+}
+
+// 定义字体(px)单位，小于20都为px单位字体
+@for $i from 9 to 20 {
+	.dz-font-#{$i} {
+		font-size: $i + px;
+	}
+}
+
+// 定义字体(rpx)单位，大于或等于20的都为rpx单位字体
+@for $i from 20 through 40 {
+	.dz-font-#{$i} {
+		font-size: $i + rpx;
+	}
+}
+
+// 定义内外边距，历遍1-80
+@for $i from 0 through 80 {
+	// 只要双数和能被5除尽的数
+	@if $i % 2 == 0 or $i % 5 == 0 {
+		// 得出：dz-margin-30或者dz-m-30
+		.dz-margin-#{$i}, .dz-m-#{$i} {
+			margin: $i + rpx!important;
+		}
+		
+		// 得出：dz-padding-30或者dz-p-30
+		.dz-padding-#{$i}, .dz-p-#{$i} {
+			padding: $i + rpx!important;
+		}
+		
+		@each $short, $long in l left, t top, r right, b bottom {
+			// 缩写版，结果如： dz-m-l-30
+			// 定义外边距
+			.dz-m-#{$short}-#{$i} {
+				margin-#{$long}: $i + rpx!important;
+			}
+			
+			// 定义内边距
+			.dz-p-#{$short}-#{$i} {
+				padding-#{$long}: $i + rpx!important;
+			}
+			
+			// 完整版，结果如：dz-margin-left-30
+			// 定义外边距
+			.dz-margin-#{$long}-#{$i} {
+				margin-#{$long}: $i + rpx!important;
+			}
+			
+			// 定义内边距
+			.dz-padding-#{$long}-#{$i} {
+				padding-#{$long}: $i + rpx!important;
+			}
+		}
+	}
+}
+

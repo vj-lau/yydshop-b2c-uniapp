@@ -1,0 +1,68 @@
+{
+  "_from": "mp-painter",
+  "_id": "mp-painter@0.2.11",
+  "_inBundle": false,
+  "_integrity": "sha512-FgG/SqJludEJzLuweXD+ZsFVLFbdErjCsAMnx7yTkoJDmlaLREirPb1+p37zulT5c5AdarJ3j6ntCdGGIKY+sg==",
+  "_location": "/mp-painter",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "mp-painter",
+    "name": "mp-painter",
+    "escapedName": "mp-painter",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/mp-painter/-/mp-painter-0.2.11.tgz",
+  "_shasum": "cc004a62c1d642f83058bc91d308796fdbbd79e8",
+  "_spec": "mp-painter",
+  "_where": "F:\\mp-painter",
+  "author": {
+    "name": "https://github.com/xlfsummer"
+  },
+  "bugs": {
+    "url": "https://github.com/xlfsummer/mp-painter/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "A declarative canvas lib using with mini-program, espacially with uniapp.",
+  "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/jest": "^24.0.23",
+    "@types/uni-app": "^1.4.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^7.0.0",
+    "debug": "^4.1.1",
+    "jest": "^24.9.0",
+    "miniprogram-types": "^0.2.0",
+    "ts-jest": "^24.2.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "homepage": "https://github.com/xlfsummer/mp-painter#readme",
+  "keywords": [],
+  "license": "ISC",
+  "main": "dist/lib/painter.js",
+  "name": "mp-painter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xlfsummer/mp-painter.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "cross-env NODE_ENV=development webpack",
+    "prepublish": "npm run build",
+    "test": "jest"
+  },
+  "types": "dist/lib/painter.d.ts",
+  "version": "0.2.11"
+}

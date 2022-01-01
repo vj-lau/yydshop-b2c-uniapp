@@ -508,6 +508,8 @@ export default {
 	},
 	onPullDownRefresh() {
 		if (!this.hasLogin) return uni.stopPullDownRefresh();
+		this.page = 1;
+		this.productList.length = 0;
 		this.initData();
 		this.getInfoData();
 	},

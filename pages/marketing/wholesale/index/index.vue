@@ -12,7 +12,7 @@
 					</view>
 				</swiper-item>
 			</swiper>
-			<view v-if="advList.length > 0"><dz-swiper :list="advList" borderRadius="0" name="cover" height="320" img-mode="scaleToFill"></dz-swiper></view>
+			<view v-if="advList.length > 0"><dz-swiper :list="advList" borderRadius="0" name="cover" height="320" img-mode="scaleToFill" @click="swiperClick"></dz-swiper></view>
 			<view class="marketing-list">
 				<view class="item" v-for="(item, index) in wholesaleList" :key="index" @tap="toGroup(item.product.id)">
 					<view class="img"><dz-image :src="item.product.picture" width="220" height="220"></dz-image></view>
@@ -44,7 +44,9 @@
 				</view>
 			</view>
 			<dz-empty v-if="loadingStatus == 'nodata'" margin-top="80" :src="empty" iconSize="360"></dz-empty>
-			<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20" margin-bottom="20"></dz-loadmore>
+			<view class="dz-p-b-20">
+				<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20"></dz-loadmore>	
+			</view>
 		</view>
 	</view>
 </template>
@@ -143,6 +145,14 @@ export default {
 				.catch(err => {
 					console.log(err);
 				});
+		},
+		swiperClick(index) {
+			let item = this.advList[index];
+			if(item.jump_type && item.jump_type == 'product_view' && this.$api.helper.isNumber(item.jump_link)) {
+			 	this.toGroup(item.jump_link)
+				return
+			}
+			this.$api.shop.advNavigate(item.jump_type, item.jump_link, item.id);
 		},
 		// 去开团
 		toGroup(id) {

@@ -264,7 +264,7 @@ export default {
 					uni.hideLoading();
 					// 获取当前页面栈，如果页面栈小于3，则直接跳转到首页
 					let pages = getCurrentPages();
-					if (pages.length <= 2) {
+					if (pages.length <= 2 || pages.length > 3) {
 						uni.reLaunch({
 							url: this.$api.appConfig.indexPath
 						});

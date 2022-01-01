@@ -31,7 +31,7 @@
 						margin: effect3d && mCurrent != index ? '0 20rpx' : 0
 					}"
 				>
-					<image class="dz-swiper-image" :src="item[name] ||  $api.helper.isObject(item) ? '' : item" :mode="imgMode"></image>
+					<image class="dz-swiper-image" :src="item[name] ?  item[name] : $api.helper.isObject(item) ? '' : item" :mode="imgMode"></image>
 					<view
 						v-if="title && item.title"
 						class="dz-swiper-title dz-line-1"

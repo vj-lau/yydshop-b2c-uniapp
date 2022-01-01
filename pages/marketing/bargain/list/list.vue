@@ -2,22 +2,46 @@
 	<view class="">
 		<dz-navbar :is-fixed="true" :title="title"></dz-navbar>
 		<dz-image :src="cover" width="100%" height="320"></dz-image>
-		<view class="double">
-			<view class="double_item" v-for="(item, index) in list" :key="index" @click="itemTab(item.product.id)">
-				<image :src="item.product.picture" mode="widthFix"></image>
-				<view class="double_title pad8">{{ item.product_name }}</view>
-				<view class="double_price pad8">
-					<view class="double_price_now" :style="{ color: theme.dzBaseColor }">
-						<text class="double_rmb">{{ language.application.moneySymbol }}</text>
-						<view class="double_num">{{ $api.helper.toFixed(item.product.price - (1 - $api.helper.toFloat(item.min_rate / 100)) * item.product.price, 2) }}</view>
+		<view class="product-box">
+			<view class="item" v-for="(item, index) in list" :key="index" @tap="itemTab(item.product.id)">
+				<view class="image"><dz-image :src="item.product.picture" width="200" height="200" borderRadius="12"></dz-image></view>
+				<view class="right">
+					<view>
+						<view class="title">{{ item.product.name }}</view>
+						<view class="tip">{{ item.product.sketch }}</view>
+					</view>
+					<view class="dz-m-t-30 dz-color-9">{{ $api.helper.formatString(language.bargain.joinNumber, item.sales) }}</view>
+					<view class="price-box">
+						<view class="price">
+							<view class="m-price" :style="{ color: theme.dzBaseColor }">
+								<text>{{ language.application.moneySymbol }}</text>
+								<text class="price-num">
+									{{ $api.helper.toFixed(item.product.price - (1 - $api.helper.toFloat(item.min_rate / 100)) * item.product.price, 2) }}
+								</text>
+							</view>
+						</view>
+						<view>
+							<dz-button
+								:custom-style="{
+									background: theme.dzBaseColor,
+									color: theme.dzBaseFontColor
+								}"
+								hover-class="none"
+								size="mini"
+								shape="circle"
+								:border="false"
+								@click="banicBuying(item.product.id)"
+							>
+								去砍价
+							</dz-button>
+						</view>
 					</view>
 				</view>
-				<view class="people pad8">{{ $api.helper.formatString(language.bargain.joinNumber, item.sales) }}</view>
 			</view>
 		</view>
-		<view class="dz-p-t-10">
-			<dz-empty v-if="productLoadingStatus == 'nodata'" margin-top="80" :src="empty" iconSize="360"></dz-empty>
-			<dz-loadmore v-if="productLoadingStatus != 'nodata'" :status="productLoadingStatus" margin-top="20" margin-bottom="20"></dz-loadmore>
+		<dz-empty v-if="productLoadingStatus == 'nodata'" margin-top="80" :src="empty" iconSize="360"></dz-empty>
+		<view class="dz-p-b-20">
+			<dz-loadmore v-if="productLoadingStatus != 'nodata'" :status="productLoadingStatus" margin-top="20"></dz-loadmore>	
 		</view>
 	</view>
 </template>
@@ -99,68 +123,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.double {
-	display: flex;
-	padding: 10rpx 20rpx;
-	justify-content: space-between;
-	flex-wrap: wrap;
-
-	.double_item {
-		width: 49%;
-		padding-bottom: 16rpx;
+.product-box {
+	padding: 20rpx;
+	.item {
+		display: flex;
+		padding: 20rpx;
+		border-radius: 15rpx;
+		margin-bottom: 20rpx;
 		background-color: #ffffff;
-		border-radius: 10rpx;
-		overflow: hidden;
-		margin-bottom: 10rpx;
-
-		image {
-			width: 100%;
-			height: 354rpx;
+		.image {
+			flex-shrink: 0;
+			width: 200rpx;
+			height: 200rpx;
+			border-radius: 12rpx;
 		}
-
-		.pad8 {
-			padding: 0 8rpx;
-		}
-
-		.double_title {
-			font-size: 28rpx;
-			font-weight: bold;
-			display: -webkit-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 1;
-			overflow: hidden;
-		}
-
-		.double_price {
+		.right {
+			flex: 1;
 			display: flex;
-
-			.double_price_now {
-				display: flex;
-				align-items: center;
-
-				.double_rmb {
-					font-size: 30rpx;
-				}
-
-				.double_num {
-					font-size: 34rpx;
-				}
+			flex-direction: column;
+			justify-content: space-between;
+			margin-left: 15rpx;
+			.title {
+				width: 460rpx;
+				font-size: 28rpx;
+				color: $dz-main-color;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
-
-			.double_price_old {
-				display: flex;
-				align-items: center;
+			.tip {
+				width: 460rpx;
 				font-size: 24rpx;
-				transform: scale(0.9);
-				text-decoration: line-through;
-				margin-left: 16rpx;
 				color: $dz-tips-color;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
-		}
-
-		.people {
-			color: $dz-tips-color;
-			font-size: 24rpx;
+			.price-box {
+				display: flex;
+				justify-content: space-between;
+				.price {
+					display: flex;
+					align-items: center;
+					font-size: 24rpx;
+					color: $dz-tips-color;
+					.m-price {
+						.price-num {
+							font-size: 36rpx;
+							font-weight: bold;
+						}
+					}
+				}
+			}
 		}
 	}
 }

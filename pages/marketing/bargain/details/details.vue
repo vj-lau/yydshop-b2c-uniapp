@@ -56,7 +56,7 @@
 							<text>{{ language.bargain.bargaiCutOff }}{{ item.bargain_money }}{{ language.bargain.baragiDollar }}</text>
 						</view>
 					</view>
-					<view v-if="!brgainLaunchView.partake.length" class="dz-m-t-20 dz-text-center" style="color: #fff">暂无好友帮砍，去分享吧~</view>
+					<view v-if="brgainLaunchView.partake && !brgainLaunchView.partake.length" class="dz-m-t-20 dz-text-center" style="color: #fff">暂无好友帮砍，去分享吧~</view>
 				</scroll-view>
 			</view>
 			<view class="time" v-if="parseInt(brgainLaunchView.state) === 0 || parseInt(brgainLaunchView.state) === 1">

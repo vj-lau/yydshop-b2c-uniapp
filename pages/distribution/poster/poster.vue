@@ -23,7 +23,7 @@
 					<view class="dz-pos-item" hover-class="hover" :hover-start-time="150" @tap.stop="shareFc(item)">
 						<image :src="item.cover" class="dz-pos-img" mode="widthFix" />
 						<view class="dz-pos-content">
-							<view class="dz-pos-tit">{{ item.title }}{{ parseInt(item.cover_width) * 2 }}</view>
+							<view class="dz-pos-tit">{{ item.title }}</view>
 						</view>
 					</view>
 					<canvas

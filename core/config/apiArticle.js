@@ -1,12 +1,5 @@
 //文章API接口
 export default {
-	// // 首页广告
-	// advIndex: "/rf-article/adv/index",
-	// //新闻
-	// articleIndex: "/rf-article/article/index",
-	// //新闻
-	// articleView: "/rf-article/article/view",
-	
 	// 首页
 	articleIndex: "/dz-article/v1/index/index",
 	// 获取顶级分类

@@ -274,13 +274,13 @@
 										<view class="thumb-box" v-for="(item2, index2) in item1.child" :key="index2" @tap.stop="categoryTab(item2)">
 											<view class="item-mendz-image">
 												<dz-image
-													:src="item1.cover ? item1.cover : item.cover ? item.cover : iconCategoryDefault"
+													:src="item2.cover ? item2.cover : item1.cover ? item1.cover : item.cover ? item.cover : iconCategoryDefault"
 													width="132"
 													height="132"
 													borderRadius="15"
 												></dz-image>
 											</view>
-											<view class="item-mendz-name dz-m-t-10 dz-line-1">{{ item2.title }}</view>
+											<view class="item-mendz-name dz-m-t-10 dz-line-1 dz-color-9">{{ item2.title }}</view>
 										</view>
 									</view>
 								</block>
@@ -806,14 +806,16 @@ page {
 
 .right-box {
 	background-color: $dz-bg-color;
+	padding-bottom: 16rpx;
 }
 
 .page-view {
-	padding: 16rpx;
+	// padding: 16rpx;
+	padding: 16rpx 16rpx 0 16rpx;
 }
 
 .class-item {
-	margin-bottom: 30rpx;
+	// margin-bottom: 30rpx;
 	background-color: #fff;
 	padding: 16rpx;
 	border-radius: 16rpx;
@@ -827,7 +829,7 @@ page {
 
 .item-sub-title {
 	font-size: 24rpx;
-	padding: 20rpx 15rpx 15rpx 15rpx;
+	padding: 20rpx 15rpx 5rpx 15rpx;
 	color: $dz-content-color;
 	font-weight: bold;
 }

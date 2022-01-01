@@ -20,9 +20,9 @@
 					</view>
 					<view class="dz-flex-8">
 						<view class="name dz-line-1" style="max-width: 500rpx;">{{ memberInfo.nickname || memberInfo.realname || language.distribution.noName }}</view>
-						<view v-if="isPromoterStore" class="dz-flex">
+						<view v-if="memberInfo && memberInfo.promoterStore && memberInfo.promoterStore.storeLevel && memberInfo.promoterStore.storeLevel.name" class="dz-flex">
 							<view class="tag dz-m-t-20" :style="{ background: theme.dzPromotDisabled, borderColor: theme.dzPromotFontColor }">
-								<text class="dz-m-r-20 dz-m-l-10 dz-line-1" style="max-width: 300rpx;" v-if="isPromoterStore">{{ memberInfo.promoterStore.storeLevel.name }}</text>
+								<text class="dz-m-r-20 dz-m-l-10 dz-line-1" style="max-width: 300rpx;">{{ memberInfo.promoterStore.storeLevel.name }}</text>
 								<view class="icon"><dz-icon :name="promoterLevel" size="65"></dz-icon></view>
 							</view>
 						</view>
@@ -286,6 +286,7 @@ export default {
 				this.userInfo.promoter &&
 				this.userInfo.promoter_store_is_open == 1 &&
 				this.userInfo.promoter.promoterStore &&
+				this.userInfo.promoter.promoterStore.storeLevel &&
 				this.userInfo.promoter.promoterStore.state == 1 &&
 				this.userInfo.promoter.promoterStore.level_id > 0
 			);

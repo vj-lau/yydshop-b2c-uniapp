@@ -34,7 +34,9 @@
 					</view>
 				</view>
 			</view>
-			<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20" margin-bottom="20"></dz-loadmore>
+			<view style="margin-top: -20rpx;" class="dz-p-b-20">
+				<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus"></dz-loadmore>
+			</view>
 		</view>
 	</view>
 </template>

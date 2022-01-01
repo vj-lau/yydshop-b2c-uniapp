@@ -93,6 +93,10 @@
 		// #endif
 		props: {
 			html: String,
+			previewImg: {
+				type: Boolean,
+				default: true
+			},
 			autopause: {
 				type: Boolean,
 				default: true
@@ -305,7 +309,7 @@
 							var preview = true;
 							this.ignore = () => preview = false;
 							_ts.$emit('imgtap', this);
-							if (preview) {
+							if (preview && this.previewImage) {
 								uni.previewImage({
 									current: this.i,
 									urls: _ts.imgList
@@ -576,7 +580,7 @@
 						var preview = true;
 						d.img.ignore = () => preview = false;
 						this.$emit('imgtap', d.img);
-						if (preview)
+						if (preview && this.previewImg)
 							uni.previewImage({
 								current: d.img.i,
 								urls: this.imgList

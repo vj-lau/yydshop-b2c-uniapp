@@ -133,7 +133,7 @@
 				<view class="product-item" v-for="(item, index) in discountProductList" :key="index" @tap="toProduct(item)">
 					<dz-image :src="item.product_picture" width="342" height="342"></dz-image>
 					<view class="price-text">{{ item.product_name }}</view>
-					<dz-tag size="mini" style="margin:0 0 10rpx 10rpx;" :bg-color="theme.dzBaseLight" :border-color="theme.dzBaseDisabled" :color="theme.dzBaseColor">
+					<dz-tag size="mini" style="margin:0 0 10rpx 10rpx;"  :bg-color="theme.dzBaseColor" :color="theme.dzBaseFontColor" mode="dark">
 						{{ (parseFloat(item.discount) / 10).toFixed(1) }}折
 					</dz-tag>
 					<view style="display: flex; align-items: flex-end; padding-left: 10rpx;">
@@ -146,7 +146,9 @@
 				</view>
 			</view>
 			<dz-empty v-if="loadingStatus == 'nodata'" margin-top="80" :text="noDataText" :src="empty" iconSize="360"></dz-empty>
-			<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20" margin-bottom="20"></dz-loadmore>
+			<view class="dz-p-b-20">
+				<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20"></dz-loadmore>
+			</view>
 			<!-- 页面加载 -->
 			<dz-page-loading :show="pageLoadingShow" :status="pageLoadingStatus" @click="pageLoadingClick"></dz-page-loading>
 		</view>

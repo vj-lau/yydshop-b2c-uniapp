@@ -117,7 +117,7 @@ export default class Request {
 
   // #endif
 
-  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP-BAIDU
+  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP-BAIDU || MP
   delete(url, data, options = {}) {
     return this.middleware({
       url,
@@ -129,7 +129,7 @@ export default class Request {
 
   // #endif
 
-  // #ifdef APP-PLUS || H5 || MP-WEIXIN
+  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP
   connect(url, data, options = {}) {
     return this.middleware({
       url,
@@ -153,7 +153,7 @@ export default class Request {
 
   // #endif
 
-  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP-BAIDU
+  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP-BAIDU || MP
   options(url, data, options = {}) {
     return this.middleware({
       url,
@@ -165,7 +165,7 @@ export default class Request {
 
   // #endif
 
-  // #ifdef APP-PLUS || H5 || MP-WEIXIN
+  // #ifdef APP-PLUS || H5 || MP-WEIXIN || MP
   trace(url, data, options = {}) {
     return this.middleware({
       url,

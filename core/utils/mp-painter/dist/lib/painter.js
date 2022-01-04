@@ -909,8 +909,10 @@ module.exports = function(t) {
 			platform: i = n,
 			upx2px: e
 		} = {}) {
+		
 			this.ctx = t, this.platform = i, this.upx2px = null != e ? e : C, "mp-alipay" == i && (this.upx2px = t => (null !=
 				e ? e : C)(2 * t))
+					console.log(t.arcTo,'o')
 		}
 		draw(t) {
 			return z(this, void 0, void 0, (function*() {
@@ -950,7 +952,8 @@ module.exports = function(t) {
 			return t.length * i
 		}
 		arcTo(t, i, e, n, o) {
-			return o < 2 ? this.ctx.lineTo(t, i) : this.ctx.arcTo(t, i, e, n, o)
+			console.log(t,i,e,n,'ok21')
+			return o < 2 ? this.ctx.lineTo(t, i) : this.ctx.arcTo ? this.ctx.arcTo(t, i, e, n, o) : this.ctx.lineTo(t, i)
 		}
 		drawImage(t, i, e, n, o, r, s, h, l) {
 			return 9 != arguments.length ? this.ctx.drawImage.call(this, ...arguments) : "mp-baidu" == this.platform ? this.ctx

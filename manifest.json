@@ -1,5 +1,5 @@
 {
-    "name" : "⠀",
+    "name" : "⠀YYDShop",
     "appid" : "__UNI__7A80C1B",
     "description" : "",
     "versionName" : "1.0.0",
@@ -89,7 +89,8 @@
         "usingComponents" : true
     },
     "mp-toutiao" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "appid" : ""
     },
     "uniStatistics" : {
         "enable" : false

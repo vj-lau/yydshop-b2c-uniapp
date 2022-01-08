@@ -406,6 +406,7 @@ module.exports = {
 				this.submitting = false;
 				return;
 			}
+			console.log('okkk')
 			if (thirdpartyPayMode === 3) {
 				//通商云微信支付
 				//目前通商云微信支付仅支持
@@ -757,10 +758,6 @@ module.exports = {
 							fail: paymentErr => {
 								console.log(JSON.stringify(paymentErr));
 								this.submitting = false;
-								this.$refs.dzToast.show({
-									title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-									type: 'warning'
-								});
 							}
 						});
 					})
@@ -801,10 +798,6 @@ module.exports = {
 									fail: paymentErr => {
 										console.log(JSON.stringify(paymentErr));
 										this.submitting = false;
-										this.$refs.dzToast.show({
-											title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-											type: 'warning'
-										});
 									}
 								});
 							})
@@ -814,6 +807,7 @@ module.exports = {
 					},
 					fail: loginErr => {
 						console.log(JSON.stringify(loginErr));
+						console.log('ok123');
 						this.submitting = false;
 						this.$refs.dzToast.show({
 							title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
@@ -868,7 +862,7 @@ module.exports = {
 							this.submitting = false;
 						},
 						serviceErr => {
-							console.log(JSON.stringify(serviceErr));
+							console.log(JSON.stringify(serviceErr),'10');
 							this.$refs.dzToast.show({
 								title: this.$api.language.orderPay.payFailTip + serviceErr.message,
 								type: 'warning'
@@ -1044,10 +1038,6 @@ module.exports = {
 							fail: paymentErr => {
 								console.log(JSON.stringify(paymentErr));
 								this.submitting = false;
-								this.$refs.dzToast.show({
-									title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-									type: 'warning'
-								});
 							}
 						});
 					})
@@ -1089,10 +1079,6 @@ module.exports = {
 									fail: paymentErr => {
 										console.log(JSON.stringify(paymentErr));
 										this.submitting = false;
-										this.$refs.dzToast.show({
-											title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-											type: 'warning'
-										});
 									}
 								});
 							})
@@ -1136,12 +1122,8 @@ module.exports = {
 							this.getPayResult();
 						},
 						fail: paymentErr => {
-							console.log(JSON.stringify(paymentErr));
+							console.log(JSON.stringify(paymentErr),);
 							this.submitting = false;
-							this.$refs.dzToast.show({
-								title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-								type: 'warning'
-							});
 						}
 					});
 				})
@@ -1449,10 +1431,6 @@ module.exports = {
 							fail: paymentErr => {
 								console.log(JSON.stringify(paymentErr));
 								this.submitting = false;
-								this.$refs.dzToast.show({
-									title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-									type: 'warning'
-								});
 							}
 						});
 					})
@@ -1493,10 +1471,6 @@ module.exports = {
 									fail: paymentErr => {
 										console.log(JSON.stringify(paymentErr));
 										this.submitting = false;
-										this.$refs.dzToast.show({
-											title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-											type: 'warning'
-										});
 									}
 								});
 							})
@@ -1505,7 +1479,8 @@ module.exports = {
 							});
 					},
 					fail: loginErr => {
-						console.log(JSON.stringify(loginErr));
+						console.log(JSON.stringify(loginErr),'2');
+						console.log('2');
 						this.submitting = false;
 						this.$refs.dzToast.show({
 							title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
@@ -1560,7 +1535,7 @@ module.exports = {
 							this.submitting = false;
 						},
 						serviceErr => {
-							console.log(JSON.stringify(serviceErr));
+							console.log(JSON.stringify(serviceErr),'1');
 							this.$refs.dzToast.show({
 								title: this.$api.language.orderPay.payFailTip + serviceErr.message,
 								type: 'warning'
@@ -1741,10 +1716,6 @@ module.exports = {
 						fail: paymentErr => {
 							console.log(JSON.stringify(paymentErr));
 							this.submitting = false;
-							this.$refs.dzToast.show({
-								title: this.$api.language.orderPay.payFailTip + paymentErr.errMsg,
-								type: 'warning'
-							});
 						}
 					});
 				})

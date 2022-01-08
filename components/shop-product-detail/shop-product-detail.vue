@@ -5,17 +5,17 @@
 			<view class="dz-header" :style="{ paddingTop: top + 'px', opacity: opcity }">
 				<view class="dz-title dz-line-1">{{ title }}</view>
 			</view>
-			<view class="dz-header-icon" :style="{ marginTop: top + 'px' }">
-				<view class="dz-icon-box" :style="{ backgroundColor: 'rgba(0, 0, 0,' + iconOpcity + ')' }" @tap="backClick(1)">
-					<dz-icon name="back_light" :size="30" :color="opcity >= 1 ? '#000' : '#fff'"></dz-icon>
+			<view class="dz-header-icon" :style="{ paddingTop: top + 'px' }">
+				<view class="dz-icon-box" :style="{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }" @tap="backClick(1)">
+					<dz-icon name="back_light" :size="30" color="#fff"></dz-icon>
 				</view>
-				<view class="dz-icon-box dz-m-l-20" :style="{ backgroundColor: 'rgba(0, 0, 0,' + iconOpcity + ')' }" @tap="backClick(2)">
-					<dz-icon name="home_light" :size="32" :color="opcity >= 1 ? '#000' : '#fff'"></dz-icon>
+				<view class="dz-icon-box dz-m-l-20" :style="{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }" @tap="backClick(2)">
+					<dz-icon name="home_light" :size="32" color="#fff"></dz-icon>
 				</view>
 
 				<button v-if="showShare" class="dz-transparent-btn" open-type="share" @tap.stop="shareClick">
-					<view class="dz-icon-box dz-icon-ml" :style="{ backgroundColor: 'rgba(0, 0, 0,' + iconOpcity + ')' }" @tap.stop="shareClick">
-						<dz-icon name="share_light" :size="30" :color="opcity >= 1 ? '#000' : '#fff'"></dz-icon>
+					<view class="dz-icon-box dz-icon-ml" :style="{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }" @tap.stop="shareClick">
+						<dz-icon name="share_light" :size="30" color="#fff"></dz-icon>
 					</view>
 				</button>
 			</view>
@@ -3212,7 +3212,7 @@ page {
 }
 
 .dz-title {
-	width: 45%;
+	width: 39%;
 	margin-left: 20rpx;
 	font-size: 32rpx;
 	/* #ifdef H5 */
@@ -3232,9 +3232,14 @@ page {
 	top: 0;
 	left: 10px;
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
-	height: 32px;
+	/* #ifdef H5 */
+	height: 44px;
+	/* #endif */
+	/* #ifndef H5 */
+	height: 64px;
+	/* #endif */
 	transform: translateZ(0);
 	z-index: 978;
 }
@@ -3254,7 +3259,6 @@ page {
 	height: 28px !important;
 	width: 28px !important;
 	padding: 8px !important;
-
 	border-radius: 50%;
 	display: flex;
 	align-items: center;

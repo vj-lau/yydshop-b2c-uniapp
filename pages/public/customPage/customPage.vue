@@ -207,6 +207,8 @@
 							:right="item.props.right == 1 ? true : false"
 							:showLine="item.props.showLine == 1 ? true : false"
 							:line-color="item.props.lineColor"
+							:bg-color="item.props.bgColor"
+							:bold="item.props.bold == 1 ? true : false"
 							@click="sectionClick(item.props.link)"
 						></dz-section>
 					</view>

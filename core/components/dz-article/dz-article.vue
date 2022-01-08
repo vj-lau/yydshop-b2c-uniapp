@@ -31,7 +31,7 @@
 				>
 					<view class="dz-flex-1">
 						<view class="dz-font-32 dz-line-1" :style="{width: titleWidth + 'px'}">{{ item.title }}</view>
-						<view v-if="isDescription == 1" class="dz-m-t-6 dz-tip dz-font-24 dz-color-9">{{ item.description }}</view>
+						<view v-if="isDescription == 1" class="dz-m-t-6 dz-tip dz-font-24 dz-color-9" :style="{width: titleWidth + 'px'}">{{ item.description }}</view>
 					</view>
 					<view class="dz-text-right dz-m-t-6 dz-color-9 dz-font-12">
 						<text v-if="isTime == 1">{{ item.created_at | timeFrom }}</text>

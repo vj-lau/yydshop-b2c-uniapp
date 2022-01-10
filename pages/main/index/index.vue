@@ -640,7 +640,7 @@ export default {
 	},
 	onShow() {
 		// #ifdef APP-PLUS
-		this.checkUpdate();
+		// this.checkUpdate();
 		// #endif
 		if (this.pageLoadingStatus == 'error' && this.pageLoadingShow) {
 			this.getIndex();

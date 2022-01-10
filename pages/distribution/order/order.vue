@@ -151,6 +151,8 @@ export default {
 					return '区域分销';
 				case 'store':
 					return '店铺分销';
+				case 'warehouse':
+					return '云仓分销';
 			}
 		}
 	},

@@ -493,7 +493,15 @@
 				<view class="dz-padding dz-p-b-30">
 					<view class="dz-sub-title dz-size dz-gray" v-if="product.sketch">{{ product.sketch }}</view>
 					<view class="dz-sale-info dz-size dz-gray">
-						<view>{{ language.product.shipping }}:{{ parseInt(product.shipping_type) === 1 ? language.product.shippingFree : ((product.shippingTemplate && product.shippingTemplate.short_description)?product.shippingTemplate.short_description:language.product.shippingPay) }}</view>
+						<view>
+							{{ language.product.shipping }}:{{
+								parseInt(product.shipping_type) === 1
+									? language.product.shippingFree
+									: product.shippingTemplate && product.shippingTemplate.short_description
+									? product.shippingTemplate.short_description
+									: language.product.shippingPay
+							}}
+						</view>
 						<view>{{ language.product.monthSale }}{{ product.total_sales || '-' }}</view>
 						<view class="dz-line-1">{{ product.address_name || '' }}</view>
 					</view>
@@ -910,359 +918,362 @@
 		<!--属性-->
 
 		<!--底部操作栏-->
-		<view class="dz-operation">
-			<view class="dz-operation-left" :class="[customerService ? 'dz-col-3' : 'dz-col-1-5']">
-				<view v-if="customerService" class="dz-operation-item" hover-class="dz-opcity" :hover-stay-time="150">
-					<dz-button
-						open-type="contact"
-						:sessionFrom="sessionFrom"
-						@click="serviceTap"
-						:border="false"
-						hover-class="none"
-						:custom-style="{
-							display: 'block',
-							background: 'transparent',
-							margin: '0rpx',
-							padding: '0rpx',
-							borderRadius: '0rpx',
-							borderWidth: '0rpx',
-							lineHeight: '1',
-							width: '100%',
-							height: '100rpx'
-						}"
-					>
-						<view class="dz-operation-item" hover-class="dz-opcity" style="height: 100rpx;">
-							<dz-icon name="service" :size="46" :color="theme.dzMainColor"></dz-icon>
-							<view class="dz-operation-text dz-scale-small">{{ language.product.onlineService }}</view>
-							<dz-badge type="error" size="mini" :count="customerServiceUnread" :offset="[2, 0]"></dz-badge>
-						</view>
-					</dz-button>
-				</view>
-				<view class="dz-operation-item" hover-class="dz-opcity" :hover-stay-time="150" @tap.stop="cartTap">
-					<dz-icon name="cart" :size="46" :color="theme.dzMainColor"></dz-icon>
-					<view class="dz-operation-text dz-scale-small">{{ language.product.cart }}</view>
-					<dz-badge type="error" size="mini" :count="cartNum" :offset="[-4, 20]"></dz-badge>
-				</view>
-			</view>
-			<view class="dz-operation-right dz-right-flex dz-btnbox-4" :class="[customerService ? 'dz-col-7' : 'dz-col-8-5']">
-				<block v-if="isBuyMode || product.marketing_type == ''">
-					<block v-if="parseInt(product.is_open_presell) === 1">
-						<!--预售-->
-						<view class="dz-flex-1">
-							<dz-button
-								:custom-style="{ background: buyBtnDisabled ? theme.dzBaseDisabled : theme.dzBaseColor, color: theme.dzBaseFontColor, height: '100rpx' }"
-								hover-class="none"
-								:disabled="buyBtnDisabled"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								<view class="dz-btn__box">
-									<view>
-										{{
-											buyBtnDisabled
-												? language.product.outOfStock
-												: `${language.product.depositPay}(${
-														parseInt(product.presell_delivery_type) === 1
-															? $api.helper.formatString(
-																	language.product.preSaleDeliverTime,
-																	$api.helper.timeFormat(product.presell_time, 'yyyy-mm-dd')
-															  )
-															: $api.helper.formatString(language.product.preSaleDeliverDay, product.presell_day)
-												  })`
-										}}
-									</view>
-									<view class="dz-flex-end">
-										<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-										<view class="dz-size-32">{{ product.presell_price }}</view>
-									</view>
-								</view>
-							</dz-button>
-						</view>
-					</block>
-					<block v-else>
-						<!--正常购买-->
-						<!--购物车-->
-						<view class="dz-flex-1" v-if="!cartBtnHide">
-							<dz-button
-								:custom-style="{
-									background: buyBtnDisabled ? theme.dzSubDisabled : theme.dzSubColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="buyBtnDisabled"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								{{ language.product.addToCart }}
-							</dz-button>
-						</view>
-						<!--积分换购-->
-						<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 3 || parseInt(product.point_exchange_type) === 4">
-							<dz-button
-								:custom-style="{
-									background: buyBtnDisabled ? theme.dzSubDisabled : theme.dzSubColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="buyBtnDisabled"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								<view class="dz-btn__box">
-									<view>{{ buyBtnDisabled ? language.product.outOfStock : language.product.exchangeByPoints }}</view>
-									<view class="dz-flex-end">
-										<view class="dz-size-32">{{ product.point_exchange }}</view>
-										<view class="dz-size-26 dz-m-l-5">{{ language.product.point }}</view>
-									</view>
-								</view>
-							</dz-button>
-						</view>
-						<!--积分加钱-->
-						<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 2">
-							<dz-button
-								:custom-style="{
-									background: parseInt(currentSkuStock) === 0 ? theme.dzBaseDisabled : theme.dzBaseColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="parseInt(currentSkuStock) === 0"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								<view class="dz-btn__box">
-									<view>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : language.product.directBuy }}</view>
-									<view class="dz-flex-end">
-										<view class="dz-size-26">{{ $api.helper.formatString(language.product.needPointTip, product.point_exchange) }}</view>
-									</view>
-								</view>
-							</dz-button>
-						</view>
-						<!--购买-->
-						<view
-							class="dz-flex-1"
-							v-if="
-								(parseInt(product.point_exchange_type) === 1 || !product.marketing_type) && (product.point_exchange_type != 2 && product.point_exchange_type != 4)
-							"
+		<view class="dz-operation-ios">
+			<view class="dz-operation">
+				<view class="dz-operation-left" :class="[customerService ? 'dz-col-3' : 'dz-col-1-5']">
+					<view v-if="customerService" class="dz-operation-item" hover-class="dz-opcity" :hover-stay-time="150">
+						<dz-button
+							open-type="contact"
+							:sessionFrom="sessionFrom"
+							@click="serviceTap"
+							:border="false"
+							hover-class="none"
+							:custom-style="{
+								display: 'block',
+								background: 'transparent',
+								margin: '0rpx',
+								padding: '0rpx',
+								borderRadius: '0rpx',
+								borderWidth: '0rpx',
+								lineHeight: '1',
+								width: '100%',
+								height: '100rpx'
+							}"
 						>
-							<dz-button
-								:custom-style="{
-									background: buyBtnDisabled ? theme.dzBaseDisabled : theme.dzBaseColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="buyBtnDisabled"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
+							<view class="dz-operation-item" hover-class="dz-opcity" style="height: 100rpx;">
+								<dz-icon name="service" :size="46" :color="theme.dzMainColor"></dz-icon>
+								<view class="dz-operation-text dz-scale-small">{{ language.product.onlineService }}</view>
+								<dz-badge type="error" size="mini" :count="customerServiceUnread" :offset="[2, 0]"></dz-badge>
+							</view>
+						</dz-button>
+					</view>
+					<view class="dz-operation-item" hover-class="dz-opcity" :hover-stay-time="150" @tap.stop="cartTap">
+						<dz-icon name="cart" :size="46" :color="theme.dzMainColor"></dz-icon>
+						<view class="dz-operation-text dz-scale-small">{{ language.product.cart }}</view>
+						<dz-badge type="error" size="mini" :count="cartNum" :offset="[-4, 20]"></dz-badge>
+					</view>
+				</view>
+				<view class="dz-operation-right dz-right-flex dz-btnbox-4" :class="[customerService ? 'dz-col-7' : 'dz-col-8-5']">
+					<block v-if="isBuyMode || product.marketing_type == ''">
+						<block v-if="parseInt(product.is_open_presell) === 1">
+							<!--预售-->
+							<view class="dz-flex-1">
+								<dz-button
+									:custom-style="{ background: buyBtnDisabled ? theme.dzBaseDisabled : theme.dzBaseColor, color: theme.dzBaseFontColor, height: '100rpx' }"
+									hover-class="none"
+									:disabled="buyBtnDisabled"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									<view class="dz-btn__box">
+										<view>
+											{{
+												buyBtnDisabled
+													? language.product.outOfStock
+													: `${language.product.depositPay}(${
+															parseInt(product.presell_delivery_type) === 1
+																? $api.helper.formatString(
+																		language.product.preSaleDeliverTime,
+																		$api.helper.timeFormat(product.presell_time, 'yyyy-mm-dd')
+																  )
+																: $api.helper.formatString(language.product.preSaleDeliverDay, product.presell_day)
+													  })`
+											}}
+										</view>
+										<view class="dz-flex-end">
+											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+											<view class="dz-size-32">{{ product.presell_price }}</view>
+										</view>
+									</view>
+								</dz-button>
+							</view>
+						</block>
+						<block v-else>
+							<!--正常购买-->
+							<!--购物车-->
+							<view class="dz-flex-1" v-if="!cartBtnHide">
+								<dz-button
+									:custom-style="{
+										background: buyBtnDisabled ? theme.dzSubDisabled : theme.dzSubColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
+									hover-class="none"
+									:disabled="buyBtnDisabled"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									{{ language.product.addToCart }}
+								</dz-button>
+							</view>
+							<!--积分换购-->
+							<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 3 || parseInt(product.point_exchange_type) === 4">
+								<dz-button
+									:custom-style="{
+										background: buyBtnDisabled ? theme.dzSubDisabled : theme.dzSubColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
+									hover-class="none"
+									:disabled="buyBtnDisabled"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									<view class="dz-btn__box">
+										<view>{{ buyBtnDisabled ? language.product.outOfStock : language.product.exchangeByPoints }}</view>
+										<view class="dz-flex-end">
+											<view class="dz-size-32">{{ product.point_exchange }}</view>
+											<view class="dz-size-26 dz-m-l-5">{{ language.product.point }}</view>
+										</view>
+									</view>
+								</dz-button>
+							</view>
+							<!--积分加钱-->
+							<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 2">
+								<dz-button
+									:custom-style="{
+										background: parseInt(currentSkuStock) === 0 ? theme.dzBaseDisabled : theme.dzBaseColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
+									hover-class="none"
+									:disabled="parseInt(currentSkuStock) === 0"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									<view class="dz-btn__box">
+										<view>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : language.product.directBuy }}</view>
+										<view class="dz-flex-end">
+											<view class="dz-size-26">{{ $api.helper.formatString(language.product.needPointTip, product.point_exchange) }}</view>
+										</view>
+									</view>
+								</dz-button>
+							</view>
+							<!--购买-->
+							<view
+								class="dz-flex-1"
+								v-if="
+									(parseInt(product.point_exchange_type) === 1 || !product.marketing_type) &&
+										(product.point_exchange_type != 2 && product.point_exchange_type != 4)
+								"
 							>
-								<!--有会员折扣-->
-								<block v-if="product.memberDiscount && product.memberDiscount.discount && product.memberDiscount.discount > 0">
-									<view class="dz-btn__box">
-										<view>{{ buyBtnDisabled ? language.product.outOfStock : language.product.directBuy }}</view>
-										<view class="dz-flex-end">
-											<view class="dz-size-26">{{ language.product.memberDiscount }} {{ language.application.moneySymbol }}</view>
-											<view class="dz-size-32">{{ currentPrice }}</view>
-										</view>
-									</view>
-								</block>
-								<!--无会员折扣-->
-								<block v-else>{{ buyBtnDisabled ? language.product.outOfStock : language.product.directBuy }}</block>
-							</dz-button>
-						</view>
-					</block>
-				</block>
-				<block v-else>
-					<!--拼团-->
-					<block v-if="product.marketing_type === 'wholesale'">
-						<block v-if="buyBtnDisabled">
-							<view class="dz-flex-1">
 								<dz-button
-									:custom-style="{ background: theme.dzBaseDisabled, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+									:custom-style="{
+										background: buyBtnDisabled ? theme.dzBaseDisabled : theme.dzBaseColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
 									hover-class="none"
-									:disabled="true"
-									:border="false"
-									shape="rightAngle"
-								>
-									{{ language.product.outOfStock }}
-								</dz-button>
-							</view>
-						</block>
-						<block v-else>
-							<view class="dz-flex-1">
-								<dz-button
-									:custom-style="{ background: theme.dzSubColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
-									hover-class="none"
+									:disabled="buyBtnDisabled"
 									:border="false"
 									shape="rightAngle"
 									@click="showPopup"
 								>
-									<view class="dz-btn__box">
-										<view>{{ language.product.directBuy }}</view>
-										<view class="dz-flex-end">
-											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-											<view class="dz-size-32">{{ marketingProductPrice }}</view>
-										</view>
-									</view>
-								</dz-button>
-							</view>
-							<view class="dz-flex-1">
-								<dz-button
-									:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
-									hover-class="none"
-									:border="false"
-									shape="rightAngle"
-									@click="wholesaleShowPopup"
-								>
-									<view class="dz-btn__box">
-										<view>{{ language.product.wholesaleBuy }}</view>
-										<view class="dz-flex-end">
-											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-											<view class="dz-size-32">{{ currentPrice }}</view>
-										</view>
-									</view>
-								</dz-button>
-							</view>
-						</block>
-					</block>
-					<!--砍价-->
-					<block v-else-if="product.marketing_type === 'bargain'">
-						<block v-if="buyBtnDisabled || parseInt(product.marketing.state) !== 1">
-							<view class="dz-flex-1">
-								<dz-button
-									:custom-style="{ background: theme.dzBaseDisabled, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
-									hover-class="none"
-									:disabled="true"
-									:border="false"
-									shape="rightAngle"
-								>
-									{{ buyBtnDisabled ? language.product.outOfStock : parseInt(product.marketing.state) === 0 ? '活动即将开始' : '活动已结束' }}
-								</dz-button>
-							</view>
-						</block>
-						<block v-else>
-							<view class="dz-flex-1">
-								<dz-button
-									:custom-style="{ background: theme.dzSubColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
-									hover-class="none"
-									:border="false"
-									shape="rightAngle"
-									@click="showPopup"
-								>
-									<view class="dz-btn__box">
-										<view>{{ language.product.directBuy }}</view>
-										<view class="dz-flex-end">
-											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-											<view class="dz-size-32">{{ currentPrice }}</view>
-										</view>
-									</view>
-								</dz-button>
-							</view>
-							<view class="dz-flex-1">
-								<dz-button
-									:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
-									hover-class="none"
-									:border="false"
-									shape="rightAngle"
-									@click="showPopup"
-								>
-									<view class="dz-btn__box">
-										<view>{{ language.product.bargainBudy }}</view>
-										<view class="dz-flex-end">
-											<view class="dz-size-26">{{ language.product.inviteBargain }} {{ language.application.moneySymbol }}</view>
-											<view class="dz-size-32">
-												{{ $api.helper.toFixed(marketingPrice - (1 - $api.helper.toFloat(product.marketing.min_rate / 100)) * marketingPrice, 2) }}
+									<!--有会员折扣-->
+									<block v-if="product.memberDiscount && product.memberDiscount.discount && product.memberDiscount.discount > 0">
+										<view class="dz-btn__box">
+											<view>{{ buyBtnDisabled ? language.product.outOfStock : language.product.directBuy }}</view>
+											<view class="dz-flex-end">
+												<view class="dz-size-26">{{ language.product.memberDiscount }} {{ language.application.moneySymbol }}</view>
+												<view class="dz-size-32">{{ currentPrice }}</view>
 											</view>
 										</view>
+									</block>
+									<!--无会员折扣-->
+									<block v-else>{{ buyBtnDisabled ? language.product.outOfStock : language.product.directBuy }}</block>
+								</dz-button>
+							</view>
+						</block>
+					</block>
+					<block v-else>
+						<!--拼团-->
+						<block v-if="product.marketing_type === 'wholesale'">
+							<block v-if="buyBtnDisabled">
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzBaseDisabled, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:disabled="true"
+										:border="false"
+										shape="rightAngle"
+									>
+										{{ language.product.outOfStock }}
+									</dz-button>
+								</view>
+							</block>
+							<block v-else>
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzSubColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:border="false"
+										shape="rightAngle"
+										@click="showPopup"
+									>
+										<view class="dz-btn__box">
+											<view>{{ language.product.directBuy }}</view>
+											<view class="dz-flex-end">
+												<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+												<view class="dz-size-32">{{ marketingProductPrice }}</view>
+											</view>
+										</view>
+									</dz-button>
+								</view>
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:border="false"
+										shape="rightAngle"
+										@click="wholesaleShowPopup"
+									>
+										<view class="dz-btn__box">
+											<view>{{ language.product.wholesaleBuy }}</view>
+											<view class="dz-flex-end">
+												<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+												<view class="dz-size-32">{{ currentPrice }}</view>
+											</view>
+										</view>
+									</dz-button>
+								</view>
+							</block>
+						</block>
+						<!--砍价-->
+						<block v-else-if="product.marketing_type === 'bargain'">
+							<block v-if="buyBtnDisabled || parseInt(product.marketing.state) !== 1">
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzBaseDisabled, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:disabled="true"
+										:border="false"
+										shape="rightAngle"
+									>
+										{{ buyBtnDisabled ? language.product.outOfStock : parseInt(product.marketing.state) === 0 ? '活动即将开始' : '活动已结束' }}
+									</dz-button>
+								</view>
+							</block>
+							<block v-else>
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzSubColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:border="false"
+										shape="rightAngle"
+										@click="showPopup"
+									>
+										<view class="dz-btn__box">
+											<view>{{ language.product.directBuy }}</view>
+											<view class="dz-flex-end">
+												<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+												<view class="dz-size-32">{{ currentPrice }}</view>
+											</view>
+										</view>
+									</dz-button>
+								</view>
+								<view class="dz-flex-1">
+									<dz-button
+										:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '100%', height: '100rpx' }"
+										hover-class="none"
+										:border="false"
+										shape="rightAngle"
+										@click="showPopup"
+									>
+										<view class="dz-btn__box">
+											<view>{{ language.product.bargainBudy }}</view>
+											<view class="dz-flex-end">
+												<view class="dz-size-26">{{ language.product.inviteBargain }} {{ language.application.moneySymbol }}</view>
+												<view class="dz-size-32">
+													{{ $api.helper.toFixed(marketingPrice - (1 - $api.helper.toFloat(product.marketing.min_rate / 100)) * marketingPrice, 2) }}
+												</view>
+											</view>
+										</view>
+									</dz-button>
+								</view>
+							</block>
+						</block>
+						<!--团购-->
+						<block v-else-if="product.marketing_type === 'group_buy'">
+							<view class="dz-flex-1">
+								<dz-button
+									:custom-style="{
+										background: buyBtnDisabled || parseInt(product.marketing.state) !== 1 ? theme.dzBaseDisabled : theme.dzBaseColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
+									hover-class="none"
+									:disabled="buyBtnDisabled || parseInt(product.marketing.state) !== 1"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									<view class="dz-btn__box">
+										<view>
+											{{
+												buyBtnDisabled
+													? language.product.outOfStock
+													: parseInt(product.marketing.state) === 0
+													? language.product.startSoon
+													: parseInt(product.marketing.state) === 2
+													? language.product.alreadyOver
+													: language.product.groupBuy
+											}}
+										</view>
+										<view class="dz-flex-end">
+											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+											<view class="dz-size-32">{{ currentPrice }}</view>
+										</view>
+									</view>
+								</dz-button>
+							</view>
+						</block>
+						<!--限时折扣-->
+						<block v-else-if="product.marketing_type === 'discount'">
+							<view class="dz-flex-1">
+								<dz-button
+									:custom-style="{
+										background: buyBtnDisabled || parseInt(product.marketing.state) !== 1 ? theme.dzBaseDisabled : theme.dzBaseColor,
+										color: theme.dzBaseFontColor,
+										width: '100%',
+										height: '100rpx'
+									}"
+									hover-class="none"
+									:disabled="buyBtnDisabled || parseInt(product.marketing.state) !== 1"
+									:border="false"
+									shape="rightAngle"
+									@click="showPopup"
+								>
+									<view class="dz-btn__box">
+										<view>
+											{{
+												buyBtnDisabled
+													? language.product.outOfStock
+													: parseInt(product.marketing.state) === 0
+													? language.product.startSoon
+													: parseInt(product.marketing.state) === 2
+													? language.product.alreadyOver
+													: language.product.discountBuy
+											}}
+										</view>
+										<view class="dz-flex-end">
+											<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
+											<view class="dz-size-32">{{ currentPrice }}</view>
+										</view>
 									</view>
 								</dz-button>
 							</view>
 						</block>
 					</block>
-					<!--团购-->
-					<block v-else-if="product.marketing_type === 'group_buy'">
-						<view class="dz-flex-1">
-							<dz-button
-								:custom-style="{
-									background: buyBtnDisabled || parseInt(product.marketing.state) !== 1 ? theme.dzBaseDisabled : theme.dzBaseColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="buyBtnDisabled || parseInt(product.marketing.state) !== 1"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								<view class="dz-btn__box">
-									<view>
-										{{
-											buyBtnDisabled
-												? language.product.outOfStock
-												: parseInt(product.marketing.state) === 0
-												? language.product.startSoon
-												: parseInt(product.marketing.state) === 2
-												? language.product.alreadyOver
-												: language.product.groupBuy
-										}}
-									</view>
-									<view class="dz-flex-end">
-										<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-										<view class="dz-size-32">{{ currentPrice }}</view>
-									</view>
-								</view>
-							</dz-button>
-						</view>
-					</block>
-					<!--限时折扣-->
-					<block v-else-if="product.marketing_type === 'discount'">
-						<view class="dz-flex-1">
-							<dz-button
-								:custom-style="{
-									background: buyBtnDisabled || parseInt(product.marketing.state) !== 1 ? theme.dzBaseDisabled : theme.dzBaseColor,
-									color: theme.dzBaseFontColor,
-									width: '100%',
-									height: '100rpx'
-								}"
-								hover-class="none"
-								:disabled="buyBtnDisabled || parseInt(product.marketing.state) !== 1"
-								:border="false"
-								shape="rightAngle"
-								@click="showPopup"
-							>
-								<view class="dz-btn__box">
-									<view>
-										{{
-											buyBtnDisabled
-												? language.product.outOfStock
-												: parseInt(product.marketing.state) === 0
-												? language.product.startSoon
-												: parseInt(product.marketing.state) === 2
-												? language.product.alreadyOver
-												: language.product.discountBuy
-										}}
-									</view>
-									<view class="dz-flex-end">
-										<view class="dz-size-26">{{ language.application.moneySymbol }}</view>
-										<view class="dz-size-32">{{ currentPrice }}</view>
-									</view>
-								</view>
-							</dz-button>
-						</view>
-					</block>
-				</block>
+				</view>
 			</view>
 		</view>
 		<!--底部操作栏-->
@@ -3839,18 +3850,23 @@ page {
 	width: 85%;
 }
 
+.dz-operation-ios {
+	width: 100%;
+	position: fixed;
+	z-index: 10;
+	bottom: 0;
+	left: 0;
+	background: rgba(255, 255, 255, 0.98);
+}
+
 .dz-operation {
 	width: 100%;
 	height: 100rpx;
 	background: rgba(255, 255, 255, 0.98);
-	position: fixed;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 10;
-	bottom: 0;
-	left: 0;
-	padding-bottom: env(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 }
 
 .dz-safearea-bottom {

@@ -114,34 +114,36 @@
 				v-model="currentSkuNumber"
 			></dz-number-box>
 		</view>
-		<view class="dz-operation dz-operation-right dz-right-flex dz-popup-btn">
-			<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 1 || parseInt(product.point_exchange_type) === 3">
-				<dz-button
-					:custom-style="{
-						background: parseInt(currentSkuStock) === 0 ? theme.dzBaseDisabled : theme.dzBaseColor,
-						color: theme.dzBaseFontColor,
-						width: '100%',
-						height: '100rpx'
-					}"
-					hover-class="none"
-					:disabled="parseInt(currentSkuStock) === 0"
-					:border="false"
-					shape="rightAngle"
-					@click="confirmClick"
-				>
-					<!--有会员折扣-->
-					<block v-if="product.memberDiscount && product.memberDiscount.length > 0 && product.memberDiscount.discount > 0">
-						<view class="dz-btn__box">
-							<view>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : buttonName }}</view>
-							<view class="dz-flex-end">
-								<view class="dz-size-26">{{ language.product.memberDiscount }} {{ language.application.moneySymbol }}</view>
-								<view class="dz-size-32">{{ currentPrice }}</view>
+		<view class="dz-operation-ios">
+			<view class="dz-operation dz-operation-right dz-right-flex dz-popup-btn">
+				<view class="dz-flex-1" v-if="parseInt(product.point_exchange_type) === 1 || parseInt(product.point_exchange_type) === 3">
+					<dz-button
+						:custom-style="{
+							background: parseInt(currentSkuStock) === 0 ? theme.dzBaseDisabled : theme.dzBaseColor,
+							color: theme.dzBaseFontColor,
+							width: '100%',
+							height: '100rpx'
+						}"
+						hover-class="none"
+						:disabled="parseInt(currentSkuStock) === 0"
+						:border="false"
+						shape="rightAngle"
+						@click="confirmClick"
+					>
+						<!--有会员折扣-->
+						<block v-if="product.memberDiscount && product.memberDiscount.length > 0 && product.memberDiscount.discount > 0">
+							<view class="dz-btn__box">
+								<view>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : buttonName }}</view>
+								<view class="dz-flex-end">
+									<view class="dz-size-26">{{ language.product.memberDiscount }} {{ language.application.moneySymbol }}</view>
+									<view class="dz-size-32">{{ currentPrice }}</view>
+								</view>
 							</view>
-						</view>
-					</block>
-					<!--无会员折扣-->
-					<block v-else>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : buttonName }}</block>
-				</dz-button>
+						</block>
+						<!--无会员折扣-->
+						<block v-else>{{ parseInt(currentSkuStock) === 0 ? language.product.outOfStock : buttonName }}</block>
+					</dz-button>
+				</view>
 			</view>
 		</view>
 		<dz-toast ref="dzToast"></dz-toast>
@@ -664,20 +666,27 @@ export default {
 	justify-content: space-between;
 	padding: 20rpx 30rpx 30rpx 30rpx;
 	box-sizing: border-box;
+	margin-bottom: env(safe-area-inset-bottom);
+}
+
+
+.dz-operation-ios {
+	width: 100%;
+	position: fixed;
+	z-index: 10;
+	bottom: 0;
+	left: 0;
+	background: rgba(255, 255, 255, 0.98);
 }
 
 .dz-operation {
 	width: 100%;
 	height: 100rpx;
 	background: rgba(255, 255, 255, 0.98);
-	position: fixed;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 10;
-	bottom: 0;
-	left: 0;
-	padding-bottom: env(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 }
 
 .dz-operation::before {

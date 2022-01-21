@@ -4167,6 +4167,7 @@ page {
 	justify-content: space-between;
 	padding: 20rpx 30rpx 30rpx 30rpx;
 	box-sizing: border-box;
+	margin-bottom: env(safe-area-inset-bottom);
 }
 /*底部选择弹层*/
 

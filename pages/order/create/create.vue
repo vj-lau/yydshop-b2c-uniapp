@@ -208,7 +208,7 @@
 				</dz-cell-item>
 			</view>
 			<!-- 金额明细 -->
-			<view class="dz-list">
+			<view class="dz-list ios-bottom">
 				<dz-cell-item
 					center
 					:title="language.orderCreate.amountGoods"
@@ -1400,6 +1400,10 @@ export default {
 	margin-top: 16rpx;
 	background: #fff;
 	border-radius: 10rpx;
+}
+
+.ios-bottom {
+	margin-bottom: env(safe-area-inset-bottom);
 }
 
 .footer {

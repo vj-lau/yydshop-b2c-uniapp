@@ -10,11 +10,11 @@ const CONFIG = {
 			eng:'mall',
 		},
 		//缺省h5访问域名
-		h5Domain: 'http://jingmeng.tgyun.com/app',
+		h5Domain: 'https://yydshop-b2c.vjlau.com/app',
 		//api访问域名
-		apiDomain: 'http://jingmeng.tgyun.com/api',
+		apiDomain: 'https://yydshop-b2c.vjlau.com/api',
 		//静态资源路径(网络资源或者本地资源，小程序不支持本地资源)
-		assetsPath: "http://jingmeng.tgyun.com/static/app/",
+		assetsPath: "https://yydshop-b2c.vjlau.com/static/app/",
 		//默认语言包
 		language: 'chs',
 		//手机注册默认区号

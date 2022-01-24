@@ -10,11 +10,11 @@ const CONFIG = {
 			eng:'mall',
 		},
 		//缺省h5访问域名
-		h5Domain: 'https://yydshop-b2c.vjlau.com/app',
+		h5Domain: 'http://jingmeng.tgyun.com/app',
 		//api访问域名
-		apiDomain: 'https://yydshop-b2c.vjlau.com/api',
+		apiDomain: 'http://jingmeng.tgyun.com/api',
 		//静态资源路径(网络资源或者本地资源，小程序不支持本地资源)
-		assetsPath: "https://yydshop-b2c.vjlau.com/static/app/",
+		assetsPath: "http://jingmeng.tgyun.com/static/app/",
 		//默认语言包
 		language: 'chs',
 		//手机注册默认区号
@@ -32,7 +32,7 @@ const CONFIG = {
 		//APP是否检测自动升级
 		appCheckUpdate: true,
 		//当前version，非APP的版本号，APP的版本号直接获取
-		version:'1.0.4',
+		version:'1.0.8',
 	},
 	//生产环境配置
 	production: {
@@ -65,7 +65,7 @@ const CONFIG = {
 		//APP是否检测自动升级
 		appCheckUpdate: true,
 		//当前version，非APP的版本号，APP的版本号直接获取
-		version:'1.0.4',
+		version:'1.0.8',
 	}
 }
 

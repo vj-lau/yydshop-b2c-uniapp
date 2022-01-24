@@ -2,8 +2,8 @@
     "name" : "YYDShop",
     "appid" : "__UNI__7A80C1B",
     "description" : "",
-    "versionName" : "1.0.4",
-    "versionCode" : 1000010004,
+    "versionName" : "1.0.8",
+    "versionCode" : 1000010008,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

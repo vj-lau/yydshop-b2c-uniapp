@@ -424,6 +424,7 @@ export default {
 						// #endif
 					} else {
 						this.$api.store.commit('login', res.data.user_info);
+						this.$api.store.commit('setWechatMpLogin', true);
 						if (parseInt(this.$api.shopSetting.app_service_type) > 0) {
 						}
 						let pages = getCurrentPages();

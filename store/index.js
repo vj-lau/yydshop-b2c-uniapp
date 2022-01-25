@@ -41,6 +41,7 @@ const EMPTY = {
 	profileNoticeTime: '',
 	signinTime: '', // 签到时间
 	wechatMpLogin: null, // 是否是小程序登录
+	wechatMpScene: '', // 获取微信小程序本次场景值
 };
 const CACHE = uni.getStorageSync('appCache') || EMPTY;
 
@@ -133,7 +134,9 @@ const store = new Vuex.Store({
 		// 签到时间
 		signinTime: CACHE.signinTime,
 		// 是否是小程序登录
-		wechatMpLogin: CACHE.wechatMpLogin
+		wechatMpLogin: CACHE.wechatMpLogin,
+		// 获取微信小程序本次场景值
+		wechatMpScene: CACHE.wechatMpScene
 	},
 	getters: {
 		// 用户是否登录
@@ -381,6 +384,10 @@ const store = new Vuex.Store({
 		},
 		setWechatMpLogin(state,provider) {
 			state.appCache.wechatMpLogin = state.wechatMpLogin = provider;
+			uni.setStorageSync("appCache", state.appCache);
+		},
+		setWechatMpScene(state,provider) {
+			state.appCache.wechatMpScene = state.wechatMpScene = provider;
 			uni.setStorageSync("appCache", state.appCache);
 		}
 	},

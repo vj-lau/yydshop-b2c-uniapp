@@ -1167,7 +1167,15 @@ export default {
 						return;
 					},
 					fail(err) {
+						_this.$api.router.push({
+							route: this.$api.routesConfig.refundOrder,
+							query: {
+								data: JSON.stringify(params),
+								shipping_money: _this.orderDetail.shipping_money
+							}
+						});
 						console.log(err, 2);
+						return;
 					}
 				});
 			} else {

@@ -1,21 +1,36 @@
 <template>
 	<view>
-		<shop-product-detail
-			:product="productDetail"
-			:customerService="customerService"
-			:sessionFrom="sessionFrom"
-			:shareData="shareData"
-			:isBuyMode="false"
-			:scrollTop="scrollTop"
-		></shop-product-detail>
-		<!-- 返回顶部 -->
-		<dz-back-top :scrollTop="scrollTop" :customStyle="{ background: '#fff', boxShadow: '0 2px 12px 0 rgba(0, 0, 0, 0.1)' }" :icon-style="{ fontSize: '36rpx' }"></dz-back-top>
-		<!-- 页面加载 -->
-		<dz-page-loading :show="pageLoadingShow" :showBack="true" :status="pageLoadingStatus" @click="pageLoadingClick" @back="pageBackClick"></dz-page-loading>
+		<view v-if="wechatMpScene != '' && wechatMpScene == 1154">
+			<dz-mask :show="true" :zIndex="1"></dz-mask>
+			<view class="mp-scene">
+				<view class="mp-weixin dz-flex dz-row-center"><dz-icon name="round_link_fill" color="#7A80FC" :size="70"></dz-icon></view>
+				<view class="mp-tip dz-text-center">点击右下角</view>
+				<img :src="guide" />
+			</view>
+		</view>
+		<view v-else>
+			<shop-product-detail
+				:product="productDetail"
+				:customerService="customerService"
+				:sessionFrom="sessionFrom"
+				:shareData="shareData"
+				:isBuyMode="false"
+				:scrollTop="scrollTop"
+			></shop-product-detail>
+			<!-- 返回顶部 -->
+			<dz-back-top
+				:scrollTop="scrollTop"
+				:customStyle="{ background: '#fff', boxShadow: '0 2px 12px 0 rgba(0, 0, 0, 0.1)' }"
+				:icon-style="{ fontSize: '36rpx' }"
+			></dz-back-top>
+			<!-- 页面加载 -->
+			<dz-page-loading :show="pageLoadingShow" :showBack="true" :status="pageLoadingStatus" @click="pageLoadingClick" @back="pageBackClick"></dz-page-loading>
+		</view>
 	</view>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import mpShare from '@/core/utils/mixin/mpShare.js';
 export default {
 	mixins: [mpShare],
@@ -28,7 +43,8 @@ export default {
 			pageLoadingShow: false,
 			pageLoadingStatus: 'loading',
 			customerService: false,
-			sessionFrom: ''
+			sessionFrom: '',
+			guide: this.$api.assetsConfig.guide
 		};
 	},
 	onPageScroll(e) {
@@ -63,6 +79,9 @@ export default {
 	onShow() {
 		//获取最新未读客服消息
 		this.$api.shop.getCustomerServiceUnread();
+	},
+	computed: {
+		...mapState(['wechatMpScene'])
 	},
 	methods: {
 		pageLoadingClick() {

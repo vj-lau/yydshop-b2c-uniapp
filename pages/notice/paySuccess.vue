@@ -238,6 +238,7 @@ export default {
 							_this.toOrder();
 						},
 						fail(err) {
+							_this.toOrder();
 							console.log(err, 2);
 						}
 					});

@@ -1,28 +1,39 @@
 <template>
 	<view>
-		<dz-navbar :title="title">
-			<view solt="left" class="dz-p-14" @tap="toHome"><dz-icon name="home_light" :size="44"></dz-icon></view>
-		</dz-navbar>
-		<view class="container">
-			<view v-if="!this.loading">
-				<view class="dz-news-title">{{ article.title }}</view>
-				<view class="dz-sub-info">
-					<view class="dz-sub-left">
-						<text class="dz-author">{{ article.author || shopSetting.store_name }}</text>
-						<text>{{ article.created_at | timeFrom }}</text>
-					</view>
-					<view class="dz-sub-right">{{ article.view_count }}浏览</view>
-					<button class="dz-transparent-btn" open-type="share" @tap.stop="shareClick"><dz-icon name="share_light" :size="30" label="分享"></dz-icon></button>
-				</view>
-				<view class="dz-news-content"><dz-parse :html="article.content" :lazy-load="true" ref="article"></dz-parse></view>
+		<view v-if="wechatMpScene != '' && wechatMpScene == 1154">
+			<dz-mask :show="true" :zIndex="1"></dz-mask>
+			<view class="mp-scene">
+				<view class="mp-weixin dz-flex dz-row-center"><dz-icon name="round_link_fill" color="#7A80FC" :size="70"></dz-icon></view>
+				<view class="mp-tip dz-text-center">点击右下角</view>
+				<img :src="guide" />
 			</view>
-			<view class="dz-safearea-bottom"></view>
 		</view>
-		<dz-toast ref="dzToast"></dz-toast>
+		<view v-else>
+			<dz-navbar :title="title">
+				<view solt="left" class="dz-p-14" @tap="toHome"><dz-icon name="home_light" :size="44"></dz-icon></view>
+			</dz-navbar>
+			<view class="container">
+				<view v-if="!this.loading">
+					<view class="dz-news-title">{{ article.title }}</view>
+					<view class="dz-sub-info">
+						<view class="dz-sub-left">
+							<text class="dz-author">{{ article.author || shopSetting.store_name }}</text>
+							<text>{{ article.created_at | timeFrom }}</text>
+						</view>
+						<view class="dz-sub-right">{{ article.view_count }}浏览</view>
+						<button class="dz-transparent-btn" open-type="share" @tap.stop="shareClick"><dz-icon name="share_light" :size="30" label="分享"></dz-icon></button>
+					</view>
+					<view class="dz-news-content"><dz-parse :html="article.content" :lazy-load="true" ref="article"></dz-parse></view>
+				</view>
+				<view class="dz-safearea-bottom"></view>
+			</view>
+			<dz-toast ref="dzToast"></dz-toast>
+		</view>
 	</view>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import appShare, { closeShare } from '@/core/utils/share';
 import mpShare from '@/core/utils/mixin/mpShare.js';
 export default {
@@ -36,7 +47,8 @@ export default {
 			loading: true,
 			shareContent: {},
 			shareData: {},
-			title: '文章详情'
+			title: '文章详情',
+			guide: this.$api.assetsConfig.guide
 		};
 	},
 	async onLoad(e) {
@@ -68,6 +80,9 @@ export default {
 			}
 			// #endif
 		}
+	},
+	computed: {
+		...mapState(['wechatMpScene'])
 	},
 	methods: {
 		async loadArticle(id) {

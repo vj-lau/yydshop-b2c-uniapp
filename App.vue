@@ -1,8 +1,11 @@
 <script>
 import $mThemeConfig from '@/core/config/themeConfig';
 export default {
-	onLaunch: function() {
+	onLaunch: function(options) {
 		console.log('App Launch');
+		if(options.scene) {
+			this.$api.store.commit('setWechatMpScene', options.scene);	
+		}
 		this.init();
 	},
 	onShow: function(options) {

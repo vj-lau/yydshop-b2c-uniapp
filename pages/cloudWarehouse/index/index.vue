@@ -316,6 +316,7 @@ export default {
 						_this.withdrawClick();
 					},
 					fail(err) {
+						_this.withdrawClick();
 						console.log(err, 2);
 					}
 				});
@@ -405,6 +406,9 @@ export default {
 						});
 					},
 					fail(err) {
+						_this.$api.router.push({
+							route: _this.$api.routesConfig.income
+						});
 						console.log(err, 2);
 					}
 				});

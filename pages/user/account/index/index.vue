@@ -91,9 +91,6 @@ export default {
 		}
 
 		this.getGuessYouLikeList();
-		wx.requestSubscribeMessage({
-			tmplIds: ['W7BiFA-HwXPVWuVGHFZotNJi6rk1koEZxWvuFxyiHF0']
-		});
 	},
 	onPullDownRefresh() {
 		if (this.hasLogin) {

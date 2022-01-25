@@ -497,11 +497,11 @@ export default {
 		// 原本商品金额
 		productOriginalMoney() {
 			let money = 0.0;
-			if (this.orderDetail.products.length == 0) return;
-
-			this.orderDetail.products.forEach(item => {
-				money += parseFloat(item.product_original_money);
-			});
+			if (this.orderDetail.products && this.orderDetail.products.length) {
+				this.orderDetail.products.forEach(item => {
+					money += item.product_original_money ? parseFloat(item.product_original_money) : 0;
+				});
+			}
 			return money;
 		},
 		// 计算商品金额
@@ -533,15 +533,19 @@ export default {
 		},
 		// 商品优惠金额
 		productMoney() {
-			let originalMoney = parseFloat(this.orderDetail.preview.product_original_money) * 10;
-			let productMoney = parseFloat(this.orderDetail.preview.product_money) * 10;
+			let originalMoney = 0
+			let productMoney = 0
+			if(this.orderDetail && this.orderDetail.preview) {
+				originalMoney = parseFloat(this.orderDetail.preview.product_original_money) * 10;
+				productMoney = parseFloat(this.orderDetail.preview.product_money) * 10;
+			}
 			return (Math.floor((originalMoney || 0) * 10) - Math.floor((productMoney || 0) * 10)) / 100;
 			// return parseInt(this.orderDetail.preview.product_original_money) - parseInt(this.orderDetail.preview.product_money);
 		},
 		// 计算实付金额
 		realAmount() {
 			let isDiscoDnt = false;
-			if ((this.data.type == 'discount' || this.data.type == 'buy_now') && this.couponItem.type == 1) {
+			if ( this.data && (this.data.type == 'discount' || this.data.type == 'buy_now') && this.couponItem.type == 1) {
 				isDiscoDnt = true;
 			}
 			let realAmount =

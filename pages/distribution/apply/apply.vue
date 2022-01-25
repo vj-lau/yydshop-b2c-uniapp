@@ -270,6 +270,9 @@ export default {
 						});
 					},
 					fail(err) {
+						_this.$api.router.push({
+							route: _this.$api.routesConfig.distributionApplyAgncy
+						});
 						console.log(err, 2);
 					}
 				});

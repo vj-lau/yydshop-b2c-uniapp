@@ -343,11 +343,6 @@ export default {
 				this.checked = res.data.all == 1 ? true : false;
 			});
 		},
-		async miniprogramMessage() {
-			wx.requestSubscribeMessage({
-				tmplIds: ['kLtFQ41TU-RswNf8vCSKhcn9PDVD7sIXHOd7Wo5Z1ac']
-			});
-		},
 		// 推送
 		async switchChange(e) {
 			await this.$api.http

@@ -1,530 +1,546 @@
 <template>
-	<view
-		class="custom-page"
-		:style="{
-			background: config.pageColorMode == 'default' ? config.pageColor : config.pageLinearColor && config.pageLinearColor.color ? config.pageLinearColor.color : '#f3f4f6'
-		}"
-	>
-		<view v-if="config.backgroundPicture" class="custom-bg-img">
-			<image
-				:src="config.backgroundPicture"
-				:style="{ width: '100%', height: config.isHeight == 0 ? parseInt(config.pictureHeight) * 2 + 'rpx' : parseInt(config.pictureHeight) + 'px' }"
-			></image>
+	<view>
+		<view v-if="wechatMpScene != '' && wechatMpScene == 1154">
+			<dz-mask :show="true" :zIndex="1"></dz-mask>
+			<view class="mp-scene">
+				<view class="mp-weixin dz-flex dz-row-center"><dz-icon name="round_link_fill" color="#7A80FC" :size="70"></dz-icon></view>
+				<view class="mp-tip dz-text-center">点击右下角</view>
+				<img :src="guide" />
+			</view>
 		</view>
 		<view
+			v-else
+			class="custom-page"
 			:style="{
 				background: config.pageColorMode == 'default' ? config.pageColor : config.pageLinearColor && config.pageLinearColor.color ? config.pageLinearColor.color : '#f3f4f6'
 			}"
 		>
-			<view v-for="(item, index) in componentDiy" :key="index">
-				<view v-if="item.component == 'dz-gap'"><dz-gap :height="parseInt(item.props.height) * 2" :bg-color="item.props.bgColor"></dz-gap></view>
-				<view v-if="item.component == 'dz-search'">
-					<dz-navbar :is-fixed="true" :is-back="false" input-align="center" :borderBottom="false" :background="{ background: item.props.searchBgColor }">
-						<view
-							:style="{
-								width: '100%',
-								padding: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
-							}"
-							class="dz-flex"
-						>
-							<view v-if="item.props.isDiy == 1 && item.props.isLeft == 1" class="dz-m-r-20">
-								<view
-									v-if="item.props.leftType == 1"
-									:style="{
-										fontSize: `${item.props.leftStyle.fontSize}px`,
-										color: item.props.leftStyle.color,
-										fontWeight: item.props.leftStyle.isBold == 1 ? 'bold' : '500'
-									}"
-								>
-									{{ item.props.leftText }}
+			<view v-if="config.backgroundPicture" class="custom-bg-img">
+				<image
+					:src="config.backgroundPicture"
+					:style="{ width: '100%', height: config.isHeight == 0 ? parseInt(config.pictureHeight) * 2 + 'rpx' : parseInt(config.pictureHeight) + 'px' }"
+				></image>
+			</view>
+			<view
+				:style="{
+					background:
+						config.pageColorMode == 'default' ? config.pageColor : config.pageLinearColor && config.pageLinearColor.color ? config.pageLinearColor.color : '#f3f4f6'
+				}"
+			>
+				<view v-for="(item, index) in componentDiy" :key="index">
+					<view v-if="item.component == 'dz-gap'"><dz-gap :height="parseInt(item.props.height) * 2" :bg-color="item.props.bgColor"></dz-gap></view>
+					<view v-if="item.component == 'dz-search'">
+						<dz-navbar :is-fixed="true" :is-back="false" input-align="center" :borderBottom="false" :background="{ background: item.props.searchBgColor }">
+							<view
+								:style="{
+									width: '100%',
+									padding: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
+								}"
+								class="dz-flex"
+							>
+								<view v-if="item.props.isDiy == 1 && item.props.isLeft == 1" class="dz-m-r-20">
+									<view
+										v-if="item.props.leftType == 1"
+										:style="{
+											fontSize: `${item.props.leftStyle.fontSize}px`,
+											color: item.props.leftStyle.color,
+											fontWeight: item.props.leftStyle.isBold == 1 ? 'bold' : '500'
+										}"
+									>
+										{{ item.props.leftText }}
+									</view>
+									<view v-if="item.props.leftType == 2">
+										<dz-image
+											:src="item.props.cover"
+											:height="parseInt(item.props.coverSize) * 2"
+											:width="parseInt(item.props.coverSize) * 2"
+											:borderRadius="parseInt(item.props.borderRadius) * 2"
+										></dz-image>
+									</view>
 								</view>
-								<view v-if="item.props.leftType == 2">
-									<dz-image
-										:src="item.props.cover"
-										:height="parseInt(item.props.coverSize) * 2"
-										:width="parseInt(item.props.coverSize) * 2"
-										:borderRadius="parseInt(item.props.borderRadius) * 2"
-									></dz-image>
+
+								<dz-search
+									class="dz-flex-1"
+									:disabled="true"
+									:shape="item.props.shape"
+									:value="item.props.value"
+									:input-align="item.props.inputAlign"
+									:bg-color="item.props.bgColor"
+									:show-action="item.props.showAction == 1 ? true : false"
+									@tap="searchTap(item.props.value)"
+								></dz-search>
+								<view v-if="item.props.isDiy == 1 && item.props.isRight == 1" class="dz-m-l-20">
+									<view v-if="item.props.rightType == 1">
+										<dz-icon name="scan" :color="item.props.rightStyle.color" :size="parseInt(item.props.rightStyle.fontSize) * 2" @tap="scanTap()"></dz-icon>
+									</view>
+									<view v-if="item.props.rightType == 2">
+										<dz-icon
+											name="notification-line"
+											:color="item.props.rightStyle.color"
+											:size="parseInt(item.props.rightStyle.fontSize) * 2"
+											@tap="toPage('notifyIndex')"
+										></dz-icon>
+										<dz-badge :count="notifyUnRead" :offset="[10, 10]"></dz-badge>
+									</view>
 								</view>
 							</view>
-
-							<dz-search
-								class="dz-flex-1"
-								:disabled="true"
-								:shape="item.props.shape"
-								:value="item.props.value"
-								:input-align="item.props.inputAlign"
-								:bg-color="item.props.bgColor"
-								:show-action="item.props.showAction == 1 ? true : false"
-								@tap="searchTap(item.props.value)"
-							></dz-search>
-							<view v-if="item.props.isDiy == 1 && item.props.isRight == 1" class="dz-m-l-20">
-								<view v-if="item.props.rightType == 1">
-									<dz-icon name="scan" :color="item.props.rightStyle.color" :size="parseInt(item.props.rightStyle.fontSize) * 2" @tap="scanTap()"></dz-icon>
-								</view>
-								<view v-if="item.props.rightType == 2">
-									<dz-icon
-										name="notification-line"
-										:color="item.props.rightStyle.color"
-										:size="parseInt(item.props.rightStyle.fontSize) * 2"
-										@tap="toPage('notifyIndex')"
-									></dz-icon>
-									<dz-badge :count="notifyUnRead" :offset="[10, 10]"></dz-badge>
-								</view>
-							</view>
-						</view>
-					</dz-navbar>
-				</view>
-				<!-- 公告 -->
-				<view
-					v-if="item.component == 'dz-notice-bar'"
-					:style="{
-						margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
-					}"
-				>
-					<dz-notice-bar
-						:list="notifyAnnounce"
-						:mode="item.props.mode"
-						:bg-color="item.props.bgColor"
-						duration="5000"
-						:volumeIcon="item.props.volumeIcon"
-						:moreIcon="item.props.moreIcon == 1 ? true : false"
-						:title="item.props.title"
-						:title-style="item.props.titleStyle"
-						:cover="item.props.cover"
-						:widthHeight="parseInt(item.props.coverSize) * 2"
-						:iconColor="item.props.iconColor"
-						:color="item.props.color"
-						:borderRadius="parseInt(item.props.radius) * 2"
-						@click="noticeClick"
-						@getMore="noticeClick"
-					></dz-notice-bar>
-				</view>
-				<!-- 轮播图 -->
-				<view
-					v-if="item.component == 'dz-swiper'"
-					:style="{
-						margin: `${item.props.topBottom}px ${item.props.leftRight}px`
-					}"
-				>
-					<dz-swiper
-						name="cover"
-						:list="item.props.list"
-						:border-radius="parseInt(item.props.borderRadius) * 2"
-						:mode="item.props.mode"
-						:height="parseInt(item.props.height) * 2"
-						:indicator-pos="item.props.indicatorPos"
-						:effect3d="item.props.effect3d == 1 ? true : false"
-						:title="item.props.title == 1 ? true : false"
-						:bgColor="item.props.bgColor"
-						@click="swiperClick(index, $event)"
-					></dz-swiper>
-				</view>
-				<!-- 分类 -->
-				<view v-if="item.component == 'dz-grid-menu'">
-					<dz-grid-menu
-						:list="item.props.list"
-						name="cover"
-						title="cate_title"
-						:col="item.props.col"
-						:isPage="item.props.isPage == 1 ? true : false"
-						:is-name="item.props.isName == 1 ? true : false"
-						:width-height="parseInt(item.props.widthHeight) * 2"
-						:border-radius="parseInt(item.props.borderRadius) * 2"
-						:radius="parseInt(item.props.radius) * 2"
-						:bgColor="item.props.bgColor"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:top-bottom="parseInt(item.props.topBottom) * 2"
-						:border="false"
-						:dot-color="item.props.dotColor"
-						:mode="item.props.mode"
-						:colNum="item.props.colNum"
-						@click="gridAdvClick(index, $event)"
-					></dz-grid-menu>
-				</view>
-				<!-- 优惠劵 -->
-				<view v-if="item.component == 'dz-coupon' && item.data.length">
-					<dz-coupon
-						:bg-color="item.props.bgColor"
-						:price-color="item.props.priceColor"
-						:price-size="parseInt(item.props.priceSize) * 2"
-						:tip-color="item.props.tipColor"
-						:tip-size="parseInt(item.props.tipSize) * 2"
-						:mode="item.props.mode"
-						:radius="parseInt(item.props.radius) * 2"
-						:top-bottom="parseInt(item.props.topBottom) * 2"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:btn-bg-color="item.props.btnBgColor"
-						:btn-color="item.props.btnColor"
-						:deputy-color="item.props.deputyColor"
-						:data-source="item.props.dataSource"
-						:list="item.data"
-					></dz-coupon>
-				</view>
-				<!-- 标题导航 -->
-				<view
-					v-if="item.component == 'dz-section'"
-					:style="{
-						margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
-					}"
-				>
-					<dz-section
-						:title="item.props.title"
-						:arrow="item.props.right == 1 ? true : false"
-						:right="item.props.right == 1 ? true : false"
-						:showLine="item.props.showLine == 1 ? true : false"
-						:line-color="item.props.lineColor"
-						:bg-color="item.props.bgColor"
-						:bold="item.props.bold == 1 ? true : false"
-						@click="sectionClick(item.props.link)"
-					></dz-section>
-				</view>
-				<!-- 商品列表 -->
-				<view v-if="item.component == 'dz-product-list'">
-					<block v-if="item.isList == 1 || item.isList == 2">
-						<shop-product-list
-							:list="item.data"
-							:theme="theme"
-							:isList="item.isList == 1 ? true : false"
-							:radius="parseInt(item.props.radius) * 2"
-							:left-right="parseInt(item.props.leftRight) * 2"
-							:top-bottom="parseInt(item.props.topBottom) * 2"
-							:cart="item.props.cart"
-							:market-price-show="item.props.marketPriceShow"
-						></shop-product-list>
-					</block>
-					<block v-if="item.isList == 3">
-						<shop-product-max
-							:list="item.data"
-							:theme="theme"
-							:defaultList="item.props.list"
-							:dataSource="item.props.dataSource"
-							:radius="parseInt(item.props.radius) * 2"
-							:left-right="parseInt(item.props.leftRight) * 2"
-							:top-bottom="parseInt(item.props.topBottom) * 2"
-							:max-height="parseInt(item.props.maxHeight ? item.props.maxHeight : 160) * 2"
-							:cart="item.props.cart"
-							:market-price-show="item.props.marketPriceShow"
-						></shop-product-max>
-					</block>
-					<block v-if="item.isList == 4">
-						<shop-product-three
-							:list="item.data"
-							:theme="theme"
-							:defaultList="item.props.list"
-							:dataSource="item.props.dataSource"
-							:radius="parseInt(item.props.radius) * 2"
-							:left-right="parseInt(item.props.leftRight) * 2"
-							:top-bottom="parseInt(item.props.topBottom) * 2"
-							:market-price-show="item.props.marketPriceShow"
-							:clearance="parseInt(item.props.clearance) * 2"
-						></shop-product-three>
-					</block>
-				</view>
-				<!-- 广告 -->
-				<view
-					v-if="item.component == 'dz-banner'"
-					class="dz-relative"
-					:style="{
-						overflow: 'hidden',
-
-						height: parseInt(item.props.height) * 2 + 'rpx',
-						margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
-					}"
-				>
-					<dz-image
-						:src="item.props.cover"
-						:borderRadius="parseInt(item.props.radius) * 2"
-						:height="parseInt(item.props.height) * 2"
-						@click="banner(item.props.link)"
-					></dz-image>
-					<block v-for="(area, areaIndex) in item.area" :key="areaIndex">
-						<view
-							class="dz-absolute"
-							:style="{
-								boxSizing: 'border-box',
-								width: parseInt(area.width) * 2 + 'rpx',
-								height: parseInt(area.height) * 2 + 'rpx',
-								top: parseInt(area.top) * 2 + 'rpx',
-								left: parseInt(area.left) * 2 + 'rpx'
-							}"
-							@tap.stop="banner(item.area[areaIndex].link)"
-						>
-							<dz-image v-if="area.cover" :src="area.cover" :width="parseInt(area.width) * 2" :height="parseInt(area.height) * 2"></dz-image>
-						</view>
-					</block>
-				</view>
-				<!-- 魔方 -->
-				<view v-if="item.component == 'dz-rubiks-cube'">
-					<shop-rubiks-cube
-						:radius="parseInt(item.props.radius) * 2"
-						:clearance="parseInt(item.props.clearance) * 2"
-						:list="item.props.list"
-						:mode="item.props.mode"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:top-buttom="parseInt(item.props.topButtom) * 2"
-						:heightConfig="item.props.heightConfig"
-						@click="rubiksCube"
-					></shop-rubiks-cube>
-				</view>
-				<!-- 辅助线 -->
-				<view v-if="item.component == 'dz-divider'">
-					<dz-divider
-						:half-width="parseInt(item.props.halfWidth) * 2"
-						:bg-color="item.props.bgColor"
-						:font-size="parseInt(item.props.fontSize) * 2"
-						:color="item.props.color"
-						:border-color="item.props.borderColor"
-						:margin-top="parseInt(item.props.marginTop) * 2"
-						:margin-bottom="parseInt(item.props.marginBottom) * 2"
-					>
-						{{ item.props.title }}
-					</dz-divider>
-				</view>
-				<!-- 标题 -->
-				<view v-if="item.component == 'dz-title'">
-					<dz-title
-						:title="item.props.title"
-						:mode="item.props.mode"
-						:bar-color="item.props.barColor"
-						:bar-bokeh-color="item.props.barBokehColor"
-						:nameLeft="item.props.coverLeft"
-						:nameRight="item.props.coverRight"
-						:font-size="parseInt(item.props.fontSize) * 2"
-						:barWidth="parseInt(item.props.barWidth) * 2"
-						:barHeight="parseInt(item.props.barHeight) * 2"
-						:title-color="item.props.titleColor"
-						:tip-config="item.props.tipConfig"
-						:icon-width="parseInt(item.props.iconWidth) * 2"
-						:icon-height="parseInt(item.props.iconHeight) * 2"
-						:text-align="item.props.textAlign"
-						:bold="item.props.bold == 1 ? true : false"
-					></dz-title>
-				</view>
-				<!-- 客服 -->
-				<view v-if="item.component == 'dz-customer-service'">
-					<dz-customer-service
-						v-if="customerService"
-						:customerServiceUnread="customerServiceUnread"
-						:sessionFrom="sessionFrom"
-						:mode="item.props.mode"
-						:bottom="parseInt(item.props.bottom) * 2"
-						:right="parseInt(item.props.right) * 2"
-						icon="customer-service"
-						:cover="item.props.cover"
-						:coverWidth="parseInt(item.props.coverWidth) * 2"
-						:coverHeight="parseInt(item.props.coverHeight) * 2"
-						:customStyle="{
-							borderRadius: parseInt(item.props.radius) * 2 + 'rpx',
-							background: item.props.bgColor,
-							boxShadow: item.props.bgColor ? '0 2px 12px 0 rgba(0, 0, 0, 0.1)' : ''
-						}"
-						:icon-style="{ fontSize: parseInt(item.props.size) * 2 + 'rpx', color: item.props.iconColor }"
-						:radius="parseInt(item.props.radius) * 2"
-						:zIndex="777"
-						@click="serviceTap"
-					></dz-customer-service>
-				</view>
-				<!-- 悬浮按钮 -->
-				<view v-if="item.component == 'dz-fab'">
-					<dz-fab
-						:mode="item.props.mode"
-						:bottom="parseInt(item.props.bottom) * 2"
-						:right="parseInt(item.props.right) * 2"
-						:width="parseInt(item.props.width) * 2"
-						:height="parseInt(item.props.height) * 2"
-						:radius="parseInt(item.props.radius) * 2"
-						:btnRadius="parseInt(item.props.btnRadius) * 2"
-						:btnList="item.props.list"
-						:bgColor="item.props.bgColor"
-						:color="item.props.color"
-						:maskClosable="false"
-						@click="fabClick($event, index)"
-					></dz-fab>
-				</view>
-				<view v-if="item.component == 'dz-article-tabs' && item.data.length">
-					<dz-button-tabs
-						v-if="item.props.cateConfig.mode == 'button'"
-						:list="item.data"
-						name="title"
-						:height="parseInt(item.props.cateConfig.height) * 2"
-						:padding="parseInt(item.props.cateConfig.padding) * 2"
-						:top-bottom="parseInt(item.props.cateConfig.topBottom) * 2"
-						:left-right="parseInt(item.props.cateConfig.leftRight) * 2"
-						:radius="parseInt(item.props.cateConfig.radius) * 2"
-						:button-radius="parseInt(item.props.cateConfig.buttonRadius) * 2"
-						:font-size="parseInt(item.props.cateConfig.fontSize) * 2"
-						:bg-color="item.props.cateConfig.bgColor"
-						:active-color="item.props.cateConfig.activeColor"
-						:inactive-color="item.props.cateConfig.inactiveColor"
-						:active-bg-color="item.props.cateConfig.activeBgColor"
-						:inactive-bg-color="item.props.cateConfig.inactiveBgColor"
-						:bold="item.props.cateConfig.bold == 1 ? true : false"
-						:current="item.props.cateConfig.activeCurrent"
-						@change="tabsChange($event, index)"
-					></dz-button-tabs>
-					<dz-tabs
-						v-else
-						:list="item.data"
-						:height="parseInt(item.props.cateConfig.height) * 2"
-						name="title"
-						:font-size="parseInt(item.props.cateConfig.fontSize) * 2"
-						:active-color="item.props.cateConfig.activeColor"
-						:bg-color="item.props.cateConfig.bgColor"
-						:inactive-color="item.props.cateConfig.inactiveColor"
-						:top-bottom="parseInt(item.props.cateConfig.topBottom) * 2"
-						:left-right="parseInt(item.props.cateConfig.leftRight) * 2"
-						:radius="parseInt(item.props.cateConfig.radius) * 2"
-						:bold="item.props.cateConfig.bold == 1 ? true : false"
-						:show-bar="item.props.cateConfig.showBar == 1 ? true : false"
-						:bar-width="parseInt(item.props.cateConfig.barWidth) * 2"
-						:bar-height="parseInt(item.props.cateConfig.barHeight) * 2"
-						:current="item.props.cateConfig.activeCurrent"
-						@change="tabsChange($event, index)"
-					></dz-tabs>
-					<view
-						v-if="isLoading && activeCurrent == index"
-						:style="{
-							height: (parseInt(item.props.artcleConfig.height) + parseInt(item.props.artcleConfig.cardPadding)) * 2 + 'rpx',
-							borderRadius: parseInt(item.props.artcleConfig.radius) * 2 + 'rpx',
-							margin: `${parseInt(item.props.artcleConfig.topBottom) * 2}rpx ${parseInt(item.props.artcleConfig.leftRight) * 2}rpx`,
-							background: '#fff'
-						}"
-						class="dz-p-20"
-					>
-						<dz-loadmore status="loading"></dz-loadmore>
+						</dz-navbar>
 					</view>
-					<dz-article
-						:list="item.props.artcleData"
-						:mode="item.props.artcleConfig.mode"
-						:data-source="item.props.artcleConfig.dataSource"
-						:top-bottom="parseInt(item.props.artcleConfig.topBottom) * 2"
-						:left-right="parseInt(item.props.artcleConfig.leftRight) * 2"
-						:card-margin="parseInt(item.props.artcleConfig.cardMargin) * 2"
-						:card-padding="parseInt(item.props.artcleConfig.cardPadding) * 2"
-						:content-padding="parseInt(item.props.artcleConfig.contentPadding) * 2"
-						:radius="parseInt(item.props.artcleConfig.radius) * 2"
-						:radius1="parseInt(item.props.artcleConfig.radius1) * 2"
-						:radius2="parseInt(item.props.artcleConfig.radius2) * 2"
-						:width="parseInt(item.props.artcleConfig.width) * 2"
-						:height="parseInt(item.props.artcleConfig.height) * 2"
-						:is-description="item.props.artcleConfig.isDescription"
-						:is-time="item.props.artcleConfig.isTime"
-						:is-view-count="item.props.artcleConfig.isViewCount"
-					></dz-article>
-				</view>
-				<!-- 文章列表 -->
-				<view v-if="item.component == 'dz-article'">
-					<dz-article
-						:list="item.data"
-						:mode="item.props.mode"
-						:defaultList="item.props.list"
-						:data-source="item.props.dataSource"
-						:top-bottom="parseInt(item.props.topBottom) * 2"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:card-margin="parseInt(item.props.cardMargin) * 2"
-						:card-padding="parseInt(item.props.cardPadding) * 2"
-						:content-padding="parseInt(item.props.contentPadding) * 2"
-						:radius="parseInt(item.props.radius) * 2"
-						:radius1="parseInt(item.props.radius1) * 2"
-						:radius2="parseInt(item.props.radius2) * 2"
-						:width="parseInt(item.props.width) * 2"
-						:height="parseInt(item.props.height) * 2"
-						:is-description="item.props.isDescription"
-						:is-time="item.props.isTime"
-						:is-view-count="item.props.isViewCount"
-					></dz-article>
-				</view>
-				<!-- 营销模块 -->
-				<view v-if="marketingType.includes(item.component)">
-					<shop-marketing
-						:props-config="item.props"
-						:title="item.props.title"
-						:top-bottom="parseInt(item.props.topBottom) * 2"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:radius="parseInt(item.props.radius) * 2"
-						:cover="item.props.cover"
-						:list="item.data"
-						:marketingType="item.component"
-						:theme="theme"
-					></shop-marketing>
-				</view>
-				<!-- 小程序直播 -->
-				<!-- #ifdef MP-WEIXIN -->
-				<view v-if="item.component == 'dz-mplive' && item.data.length > 0">
-					<shop-mplive
-						:list="item.data"
-						:top-bottom="parseInt(item.props.topBottom) * 2"
-						:left-right="parseInt(item.props.leftRight) * 2"
-						:radius="parseInt(item.props.radius) * 2"
-						:propsConfig="item.props"
-					></shop-mplive>
-				</view>
-				<!-- #endif -->
-				<view style="height: 2rpx;"></view>
-			</view>
-		</view>
-		<!--ICP备案-->
-		<!--#ifdef H5-->
-		<view class="copyright" v-if="parseInt(shopSetting.copyright_show) == 1 && showPageCopyright">
-			<dz-icon v-if="shopSetting.copyright_logo" :name="shopSetting.copyright_logo" width="28" height="28" :custom-style="{ marginRight: '6rpx' }"></dz-icon>
-			{{ shopSetting.copyright_desc || shopSetting.copyright_companyname }}
-			<dz-link style="margin-left: 10rpx;font-size: 26rpx;" :href="shopSetting.copyright_url || 'https://beian.miit.gov.cn/'">{{ shopSetting.copyright_icp }}</dz-link>
-		</view>
-		<!-- #endif -->
-		<!-- 协议 -->
-		<dz-popup v-model="protocolShow" mode="center" width="90%" border-radius="40" :mask-close-able="false" z-index="9999999">
-			<view class="protocol-content">
-				<view class="title">温馨提示</view>
-				<view class="name">欢迎来到{{ appName }}</view>
-				<view class="text">
-					请您务必审慎阅读、充分理解“服务协议”和“隐私政策”的各条款、 包括但不限于为了向您提供即时通讯、内容分享、用户消息推送等服务，
-					我们需要收集您的设备信息，操作日志等个人信息。 您可以在“设置”中查看、变更、删除个人信息并管理你的授权。 你可阅读
-					<text class="text-blue" @tap="protocol('用户协议', 'register')">用户协议</text>
-					、
-					<text class="text-blue" @tap="protocol('隐私政策', 'privacy')">隐私政策</text>
-					了解详细信息。 如你同意，请点击“同意”开始接受我们的服务。
-				</view>
-				<view class="dz-flex popup-btn dz-m-t-40">
-					<dz-button
-						shape="circle"
-						:border="false"
-						hoverClass="none"
-						:customStyle="{ width: '240rpx', height: '80rpx', background: '#fff', border: '1rpx solid rgba(0,0,0,0.12)' }"
-						@click="unAgreeProtocol"
+					<!-- 公告 -->
+					<view
+						v-if="item.component == 'dz-notice-bar'"
+						:style="{
+							margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
+						}"
 					>
-						不同意
-					</dz-button>
-					<dz-button
-						shape="circle"
-						:border="false"
-						hoverClass="none"
-						:customStyle="{ width: '240rpx', height: '80rpx', background: theme.dzBaseColor, color: theme.dzBaseFontColor }"
-						@click="agreeProtocol"
+						<dz-notice-bar
+							:list="notifyAnnounce"
+							:mode="item.props.mode"
+							:bg-color="item.props.bgColor"
+							duration="5000"
+							:volumeIcon="item.props.volumeIcon"
+							:moreIcon="item.props.moreIcon == 1 ? true : false"
+							:title="item.props.title"
+							:title-style="item.props.titleStyle"
+							:cover="item.props.cover"
+							:widthHeight="parseInt(item.props.coverSize) * 2"
+							:iconColor="item.props.iconColor"
+							:color="item.props.color"
+							:borderRadius="parseInt(item.props.radius) * 2"
+							@click="noticeClick"
+							@getMore="noticeClick"
+						></dz-notice-bar>
+					</view>
+					<!-- 轮播图 -->
+					<view
+						v-if="item.component == 'dz-swiper'"
+						:style="{
+							margin: `${item.props.topBottom}px ${item.props.leftRight}px`
+						}"
 					>
-						同意
-					</dz-button>
+						<dz-swiper
+							name="cover"
+							:list="item.props.list"
+							:border-radius="parseInt(item.props.borderRadius) * 2"
+							:mode="item.props.mode"
+							:height="parseInt(item.props.height) * 2"
+							:indicator-pos="item.props.indicatorPos"
+							:effect3d="item.props.effect3d == 1 ? true : false"
+							:title="item.props.title == 1 ? true : false"
+							:bgColor="item.props.bgColor"
+							@click="swiperClick(index, $event)"
+						></dz-swiper>
+					</view>
+					<!-- 分类 -->
+					<view v-if="item.component == 'dz-grid-menu'">
+						<dz-grid-menu
+							:list="item.props.list"
+							name="cover"
+							title="cate_title"
+							:col="item.props.col"
+							:isPage="item.props.isPage == 1 ? true : false"
+							:is-name="item.props.isName == 1 ? true : false"
+							:width-height="parseInt(item.props.widthHeight) * 2"
+							:border-radius="parseInt(item.props.borderRadius) * 2"
+							:radius="parseInt(item.props.radius) * 2"
+							:bgColor="item.props.bgColor"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:top-bottom="parseInt(item.props.topBottom) * 2"
+							:border="false"
+							:dot-color="item.props.dotColor"
+							:mode="item.props.mode"
+							:colNum="item.props.colNum"
+							@click="gridAdvClick(index, $event)"
+						></dz-grid-menu>
+					</view>
+					<!-- 优惠劵 -->
+					<view v-if="item.component == 'dz-coupon' && item.data.length">
+						<dz-coupon
+							:bg-color="item.props.bgColor"
+							:price-color="item.props.priceColor"
+							:price-size="parseInt(item.props.priceSize) * 2"
+							:tip-color="item.props.tipColor"
+							:tip-size="parseInt(item.props.tipSize) * 2"
+							:mode="item.props.mode"
+							:radius="parseInt(item.props.radius) * 2"
+							:top-bottom="parseInt(item.props.topBottom) * 2"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:btn-bg-color="item.props.btnBgColor"
+							:btn-color="item.props.btnColor"
+							:deputy-color="item.props.deputyColor"
+							:data-source="item.props.dataSource"
+							:list="item.data"
+						></dz-coupon>
+					</view>
+					<!-- 标题导航 -->
+					<view
+						v-if="item.component == 'dz-section'"
+						:style="{
+							margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
+						}"
+					>
+						<dz-section
+							:title="item.props.title"
+							:arrow="item.props.right == 1 ? true : false"
+							:right="item.props.right == 1 ? true : false"
+							:showLine="item.props.showLine == 1 ? true : false"
+							:line-color="item.props.lineColor"
+							:bg-color="item.props.bgColor"
+							:bold="item.props.bold == 1 ? true : false"
+							@click="sectionClick(item.props.link)"
+						></dz-section>
+					</view>
+					<!-- 商品列表 -->
+					<view v-if="item.component == 'dz-product-list'">
+						<block v-if="item.isList == 1 || item.isList == 2">
+							<shop-product-list
+								:list="item.data"
+								:theme="theme"
+								:isList="item.isList == 1 ? true : false"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:cart="item.props.cart"
+								:market-price-show="item.props.marketPriceShow"
+							></shop-product-list>
+						</block>
+						<block v-if="item.isList == 3">
+							<shop-product-max
+								:list="item.data"
+								:theme="theme"
+								:defaultList="item.props.list"
+								:dataSource="item.props.dataSource"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:max-height="parseInt(item.props.maxHeight ? item.props.maxHeight : 160) * 2"
+								:cart="item.props.cart"
+								:market-price-show="item.props.marketPriceShow"
+							></shop-product-max>
+						</block>
+						<block v-if="item.isList == 4">
+							<shop-product-three
+								:list="item.data"
+								:theme="theme"
+								:defaultList="item.props.list"
+								:dataSource="item.props.dataSource"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:market-price-show="item.props.marketPriceShow"
+								:clearance="parseInt(item.props.clearance) * 2"
+							></shop-product-three>
+						</block>
+					</view>
+					<!-- 广告 -->
+					<view
+						v-if="item.component == 'dz-banner'"
+						class="dz-relative"
+						:style="{
+							overflow: 'hidden',
+
+							height: parseInt(item.props.height) * 2 + 'rpx',
+							margin: `${parseInt(item.props.topBottom) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx`
+						}"
+					>
+						<dz-image
+							:src="item.props.cover"
+							:borderRadius="parseInt(item.props.radius) * 2"
+							:height="parseInt(item.props.height) * 2"
+							@click="banner(item.props.link)"
+						></dz-image>
+						<block v-for="(area, areaIndex) in item.area" :key="areaIndex">
+							<view
+								class="dz-absolute"
+								:style="{
+									boxSizing: 'border-box',
+									width: parseInt(area.width) * 2 + 'rpx',
+									height: parseInt(area.height) * 2 + 'rpx',
+									top: parseInt(area.top) * 2 + 'rpx',
+									left: parseInt(area.left) * 2 + 'rpx'
+								}"
+								@tap.stop="banner(item.area[areaIndex].link)"
+							>
+								<dz-image v-if="area.cover" :src="area.cover" :width="parseInt(area.width) * 2" :height="parseInt(area.height) * 2"></dz-image>
+							</view>
+						</block>
+					</view>
+					<!-- 魔方 -->
+					<view v-if="item.component == 'dz-rubiks-cube'">
+						<shop-rubiks-cube
+							:radius="parseInt(item.props.radius) * 2"
+							:clearance="parseInt(item.props.clearance) * 2"
+							:list="item.props.list"
+							:mode="item.props.mode"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:top-buttom="parseInt(item.props.topButtom) * 2"
+							:heightConfig="item.props.heightConfig"
+							@click="rubiksCube"
+						></shop-rubiks-cube>
+					</view>
+					<!-- 辅助线 -->
+					<view v-if="item.component == 'dz-divider'">
+						<dz-divider
+							:half-width="parseInt(item.props.halfWidth) * 2"
+							:bg-color="item.props.bgColor"
+							:font-size="parseInt(item.props.fontSize) * 2"
+							:color="item.props.color"
+							:border-color="item.props.borderColor"
+							:margin-top="parseInt(item.props.marginTop) * 2"
+							:margin-bottom="parseInt(item.props.marginBottom) * 2"
+						>
+							{{ item.props.title }}
+						</dz-divider>
+					</view>
+					<!-- 标题 -->
+					<view v-if="item.component == 'dz-title'">
+						<dz-title
+							:title="item.props.title"
+							:mode="item.props.mode"
+							:bar-color="item.props.barColor"
+							:bar-bokeh-color="item.props.barBokehColor"
+							:nameLeft="item.props.coverLeft"
+							:nameRight="item.props.coverRight"
+							:font-size="parseInt(item.props.fontSize) * 2"
+							:barWidth="parseInt(item.props.barWidth) * 2"
+							:barHeight="parseInt(item.props.barHeight) * 2"
+							:title-color="item.props.titleColor"
+							:tip-config="item.props.tipConfig"
+							:icon-width="parseInt(item.props.iconWidth) * 2"
+							:icon-height="parseInt(item.props.iconHeight) * 2"
+							:text-align="item.props.textAlign"
+							:bold="item.props.bold == 1 ? true : false"
+						></dz-title>
+					</view>
+					<!-- 客服 -->
+					<view v-if="item.component == 'dz-customer-service'">
+						<dz-customer-service
+							v-if="customerService"
+							:customerServiceUnread="customerServiceUnread"
+							:sessionFrom="sessionFrom"
+							:mode="item.props.mode"
+							:bottom="parseInt(item.props.bottom) * 2"
+							:right="parseInt(item.props.right) * 2"
+							icon="customer-service"
+							:cover="item.props.cover"
+							:coverWidth="parseInt(item.props.coverWidth) * 2"
+							:coverHeight="parseInt(item.props.coverHeight) * 2"
+							:customStyle="{
+								borderRadius: parseInt(item.props.radius) * 2 + 'rpx',
+								background: item.props.bgColor,
+								boxShadow: item.props.bgColor ? '0 2px 12px 0 rgba(0, 0, 0, 0.1)' : ''
+							}"
+							:icon-style="{ fontSize: parseInt(item.props.size) * 2 + 'rpx', color: item.props.iconColor }"
+							:radius="parseInt(item.props.radius) * 2"
+							:zIndex="777"
+							@click="serviceTap"
+						></dz-customer-service>
+					</view>
+					<!-- 悬浮按钮 -->
+					<view v-if="item.component == 'dz-fab'">
+						<dz-fab
+							:mode="item.props.mode"
+							:bottom="parseInt(item.props.bottom) * 2"
+							:right="parseInt(item.props.right) * 2"
+							:width="parseInt(item.props.width) * 2"
+							:height="parseInt(item.props.height) * 2"
+							:radius="parseInt(item.props.radius) * 2"
+							:btnRadius="parseInt(item.props.btnRadius) * 2"
+							:btnList="item.props.list"
+							:bgColor="item.props.bgColor"
+							:color="item.props.color"
+							:maskClosable="false"
+							@click="fabClick($event, index)"
+						></dz-fab>
+					</view>
+					<view v-if="item.component == 'dz-article-tabs' && item.data.length">
+						<dz-button-tabs
+							v-if="item.props.cateConfig.mode == 'button'"
+							:list="item.data"
+							name="title"
+							:height="parseInt(item.props.cateConfig.height) * 2"
+							:padding="parseInt(item.props.cateConfig.padding) * 2"
+							:top-bottom="parseInt(item.props.cateConfig.topBottom) * 2"
+							:left-right="parseInt(item.props.cateConfig.leftRight) * 2"
+							:radius="parseInt(item.props.cateConfig.radius) * 2"
+							:button-radius="parseInt(item.props.cateConfig.buttonRadius) * 2"
+							:font-size="parseInt(item.props.cateConfig.fontSize) * 2"
+							:bg-color="item.props.cateConfig.bgColor"
+							:active-color="item.props.cateConfig.activeColor"
+							:inactive-color="item.props.cateConfig.inactiveColor"
+							:active-bg-color="item.props.cateConfig.activeBgColor"
+							:inactive-bg-color="item.props.cateConfig.inactiveBgColor"
+							:bold="item.props.cateConfig.bold == 1 ? true : false"
+							:current="item.props.cateConfig.activeCurrent"
+							@change="tabsChange($event, index)"
+						></dz-button-tabs>
+						<dz-tabs
+							v-else
+							:list="item.data"
+							:height="parseInt(item.props.cateConfig.height) * 2"
+							name="title"
+							:font-size="parseInt(item.props.cateConfig.fontSize) * 2"
+							:active-color="item.props.cateConfig.activeColor"
+							:bg-color="item.props.cateConfig.bgColor"
+							:inactive-color="item.props.cateConfig.inactiveColor"
+							:top-bottom="parseInt(item.props.cateConfig.topBottom) * 2"
+							:left-right="parseInt(item.props.cateConfig.leftRight) * 2"
+							:radius="parseInt(item.props.cateConfig.radius) * 2"
+							:bold="item.props.cateConfig.bold == 1 ? true : false"
+							:show-bar="item.props.cateConfig.showBar == 1 ? true : false"
+							:bar-width="parseInt(item.props.cateConfig.barWidth) * 2"
+							:bar-height="parseInt(item.props.cateConfig.barHeight) * 2"
+							:current="item.props.cateConfig.activeCurrent"
+							@change="tabsChange($event, index)"
+						></dz-tabs>
+						<view
+							v-if="isLoading && activeCurrent == index"
+							:style="{
+								height: (parseInt(item.props.artcleConfig.height) + parseInt(item.props.artcleConfig.cardPadding)) * 2 + 'rpx',
+								borderRadius: parseInt(item.props.artcleConfig.radius) * 2 + 'rpx',
+								margin: `${parseInt(item.props.artcleConfig.topBottom) * 2}rpx ${parseInt(item.props.artcleConfig.leftRight) * 2}rpx`,
+								background: '#fff'
+							}"
+							class="dz-p-20"
+						>
+							<dz-loadmore status="loading"></dz-loadmore>
+						</view>
+						<dz-article
+							:list="item.props.artcleData"
+							:mode="item.props.artcleConfig.mode"
+							:data-source="item.props.artcleConfig.dataSource"
+							:top-bottom="parseInt(item.props.artcleConfig.topBottom) * 2"
+							:left-right="parseInt(item.props.artcleConfig.leftRight) * 2"
+							:card-margin="parseInt(item.props.artcleConfig.cardMargin) * 2"
+							:card-padding="parseInt(item.props.artcleConfig.cardPadding) * 2"
+							:content-padding="parseInt(item.props.artcleConfig.contentPadding) * 2"
+							:radius="parseInt(item.props.artcleConfig.radius) * 2"
+							:radius1="parseInt(item.props.artcleConfig.radius1) * 2"
+							:radius2="parseInt(item.props.artcleConfig.radius2) * 2"
+							:width="parseInt(item.props.artcleConfig.width) * 2"
+							:height="parseInt(item.props.artcleConfig.height) * 2"
+							:is-description="item.props.artcleConfig.isDescription"
+							:is-time="item.props.artcleConfig.isTime"
+							:is-view-count="item.props.artcleConfig.isViewCount"
+						></dz-article>
+					</view>
+					<!-- 文章列表 -->
+					<view v-if="item.component == 'dz-article'">
+						<dz-article
+							:list="item.data"
+							:mode="item.props.mode"
+							:defaultList="item.props.list"
+							:data-source="item.props.dataSource"
+							:top-bottom="parseInt(item.props.topBottom) * 2"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:card-margin="parseInt(item.props.cardMargin) * 2"
+							:card-padding="parseInt(item.props.cardPadding) * 2"
+							:content-padding="parseInt(item.props.contentPadding) * 2"
+							:radius="parseInt(item.props.radius) * 2"
+							:radius1="parseInt(item.props.radius1) * 2"
+							:radius2="parseInt(item.props.radius2) * 2"
+							:width="parseInt(item.props.width) * 2"
+							:height="parseInt(item.props.height) * 2"
+							:is-description="item.props.isDescription"
+							:is-time="item.props.isTime"
+							:is-view-count="item.props.isViewCount"
+						></dz-article>
+					</view>
+					<!-- 营销模块 -->
+					<view v-if="marketingType.includes(item.component)">
+						<shop-marketing
+							:props-config="item.props"
+							:title="item.props.title"
+							:top-bottom="parseInt(item.props.topBottom) * 2"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:radius="parseInt(item.props.radius) * 2"
+							:cover="item.props.cover"
+							:list="item.data"
+							:marketingType="item.component"
+							:theme="theme"
+						></shop-marketing>
+					</view>
+					<!-- 小程序直播 -->
+					<!-- #ifdef MP-WEIXIN -->
+					<view v-if="item.component == 'dz-mplive' && item.data.length > 0">
+						<shop-mplive
+							:list="item.data"
+							:top-bottom="parseInt(item.props.topBottom) * 2"
+							:left-right="parseInt(item.props.leftRight) * 2"
+							:radius="parseInt(item.props.radius) * 2"
+							:propsConfig="item.props"
+						></shop-mplive>
+					</view>
+					<!-- #endif -->
+					<view style="height: 2rpx;"></view>
 				</view>
 			</view>
-		</dz-popup>
-		<dz-toast ref="dzToast"></dz-toast>
-		<!-- tabbar -->
-		<dz-tabbar
-			v-if="tabbarList.props && tabbarList.props.dataSource != 'default'"
-			:list="tabbarList.props.list.slice(0, tabbarList.props.num)"
-			:bgColor="tabbarList.props.bgColor"
-			:inactiveColor="tabbarList.props.inactiveColor"
-			:activeColor="tabbarList.props.activeColor || theme.dzBaseColor"
-			:mid-button="(parseInt(tabbarList.props.isButton) === 1 ? true : false) || false"
-			:fontSize="parseInt(tabbarList.props.fontSize ? tabbarList.props.fontSize : 12) * 2"
-		></dz-tabbar>
-		<dz-tabbar v-else :list="defaultTabbarList" :activeColor="theme.dzBaseColor"></dz-tabbar>
-		<!-- 返回顶部 -->
-		<dz-back-top :scroll-top="scrollTop" :customStyle="{ background: '#fff', boxShadow: '0 2px 12px 0 rgba(0, 0, 0, 0.1)' }" :icon-style="{ fontSize: '36rpx' }"></dz-back-top>
-		<!-- 页面加载 -->
-		<dz-page-loading :show="pageLoadingShow" :status="pageLoadingStatus" zIndex="981" @click="pageLoadingClick"></dz-page-loading>
-		<dz-wechat-guide :show="guideShow" :guideConfig="shopSetting" :paddingTop="paddingTop" @hideGuide="hideGuideTap()"></dz-wechat-guide>
-		<shop-popup-adv :list="popAdvList" :show="popupAdvShow" @cancel="popupAdvCancel" @davClick="davClick"></shop-popup-adv>
+			<!--ICP备案-->
+			<!--#ifdef H5-->
+			<view class="copyright" v-if="parseInt(shopSetting.copyright_show) == 1 && showPageCopyright">
+				<dz-icon v-if="shopSetting.copyright_logo" :name="shopSetting.copyright_logo" width="28" height="28" :custom-style="{ marginRight: '6rpx' }"></dz-icon>
+				{{ shopSetting.copyright_desc || shopSetting.copyright_companyname }}
+				<dz-link style="margin-left: 10rpx;font-size: 26rpx;" :href="shopSetting.copyright_url || 'https://beian.miit.gov.cn/'">{{ shopSetting.copyright_icp }}</dz-link>
+			</view>
+			<!-- #endif -->
+			<!-- 协议 -->
+			<dz-popup v-model="protocolShow" mode="center" width="90%" border-radius="40" :mask-close-able="false" z-index="9999999">
+				<view class="protocol-content">
+					<view class="title">温馨提示</view>
+					<view class="name">欢迎来到{{ appName }}</view>
+					<view class="text">
+						请您务必审慎阅读、充分理解“服务协议”和“隐私政策”的各条款、 包括但不限于为了向您提供即时通讯、内容分享、用户消息推送等服务，
+						我们需要收集您的设备信息，操作日志等个人信息。 您可以在“设置”中查看、变更、删除个人信息并管理你的授权。 你可阅读
+						<text class="text-blue" @tap="protocol('用户协议', 'register')">用户协议</text>
+						、
+						<text class="text-blue" @tap="protocol('隐私政策', 'privacy')">隐私政策</text>
+						了解详细信息。 如你同意，请点击“同意”开始接受我们的服务。
+					</view>
+					<view class="dz-flex popup-btn dz-m-t-40">
+						<dz-button
+							shape="circle"
+							:border="false"
+							hoverClass="none"
+							:customStyle="{ width: '240rpx', height: '80rpx', background: '#fff', border: '1rpx solid rgba(0,0,0,0.12)' }"
+							@click="unAgreeProtocol"
+						>
+							不同意
+						</dz-button>
+						<dz-button
+							shape="circle"
+							:border="false"
+							hoverClass="none"
+							:customStyle="{ width: '240rpx', height: '80rpx', background: theme.dzBaseColor, color: theme.dzBaseFontColor }"
+							@click="agreeProtocol"
+						>
+							同意
+						</dz-button>
+					</view>
+				</view>
+			</dz-popup>
+			<dz-toast ref="dzToast"></dz-toast>
+			<!-- tabbar -->
+			<dz-tabbar
+				v-if="tabbarList.props && tabbarList.props.dataSource != 'default'"
+				:list="tabbarList.props.list.slice(0, tabbarList.props.num)"
+				:bgColor="tabbarList.props.bgColor"
+				:inactiveColor="tabbarList.props.inactiveColor"
+				:activeColor="tabbarList.props.activeColor || theme.dzBaseColor"
+				:mid-button="(parseInt(tabbarList.props.isButton) === 1 ? true : false) || false"
+				:fontSize="parseInt(tabbarList.props.fontSize ? tabbarList.props.fontSize : 12) * 2"
+			></dz-tabbar>
+			<dz-tabbar v-else :list="defaultTabbarList" :activeColor="theme.dzBaseColor"></dz-tabbar>
+			<!-- 返回顶部 -->
+			<dz-back-top
+				:scroll-top="scrollTop"
+				:customStyle="{ background: '#fff', boxShadow: '0 2px 12px 0 rgba(0, 0, 0, 0.1)' }"
+				:icon-style="{ fontSize: '36rpx' }"
+			></dz-back-top>
+			<!-- 页面加载 -->
+			<dz-page-loading :show="pageLoadingShow" :status="pageLoadingStatus" zIndex="981" @click="pageLoadingClick"></dz-page-loading>
+			<dz-wechat-guide :show="guideShow" :guideConfig="shopSetting" :paddingTop="paddingTop" @hideGuide="hideGuideTap()"></dz-wechat-guide>
+			<shop-popup-adv :list="popAdvList" :show="popupAdvShow" @cancel="popupAdvCancel" @davClick="davClick"></shop-popup-adv>
+		</view>
 	</view>
 </template>
 
@@ -561,11 +577,12 @@ export default {
 			sessionFrom: '',
 			isLoading: false,
 			activeCurrent: '',
-			showPageCopyright: false
+			showPageCopyright: false,
+			guide: this.$api.assetsConfig.guide
 		};
 	},
 	computed: {
-		...mapState(['tabbarList', 'wechatTip', 'popupAdvTime', 'isGuide', 'isAgree', 'isPopAdv', 'customerServiceUnread'])
+		...mapState(['tabbarList', 'wechatTip', 'popupAdvTime', 'isGuide', 'isAgree', 'isPopAdv', 'customerServiceUnread', 'wechatMpScene'])
 	},
 	async onLoad(e) {
 		await this.$onLaunched;
@@ -648,6 +665,7 @@ export default {
 	},
 	onUnload() {
 		this.$off(['themeChange']);
+		this.$api.store.commit('setMpWeixinScene', '');	
 	},
 	onPullDownRefresh() {
 		this.getIndex();

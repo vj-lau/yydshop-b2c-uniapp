@@ -1,185 +1,202 @@
 <template>
 	<view>
-		<dz-navbar :title="language.wholesaleDetail.wholesaleDetailTitle"></dz-navbar>
-		<view class="marketing-list">
-			<view class="item" @tap="gotoProduct(wholesaleView.product_id)">
-				<image class="img" :src="wholesaleView.product_picture" lazy-load></image>
-				<view class="right">
-					<view>
-						<view class="title">{{ wholesaleView.product_name }}</view>
-						<view class="text">{{ wholesaleView.sku_name || language.application.defaultSkuName }}</view>
-					</view>
-					<view class="price-box">
-						<view class="price">
-							<text>{{ language.application.moneySymbol }}</text>
-							<text>{{ wholesaleView.product_money }}</text>
-							<view class="price-tip">x 1</view>
+		<view v-if="wechatMpScene != '' && wechatMpScene == 1154">
+			<dz-mask :show="true" :zIndex="1"></dz-mask>
+			<view class="mp-scene">
+				<view class="mp-weixin dz-flex dz-row-center"><dz-icon name="round_link_fill" color="#7A80FC" :size="70"></dz-icon></view>
+				<view class="mp-tip dz-text-center">点击右下角</view>
+				<img :src="guide" />
+			</view>
+		</view>
+		<view v-else>
+			<dz-navbar :title="language.wholesaleDetail.wholesaleDetailTitle"></dz-navbar>
+			<view class="marketing-list">
+				<view class="item" @tap="gotoProduct(wholesaleView.product_id)">
+					<image class="img" :src="wholesaleView.product_picture" lazy-load></image>
+					<view class="right">
+						<view>
+							<view class="title">{{ wholesaleView.product_name }}</view>
+							<view class="text">{{ wholesaleView.sku_name || language.application.defaultSkuName }}</view>
 						</view>
-						<dz-tag size="mini" :bg-color="theme.dzBaseColor" :color="theme.dzBaseFontColor" mode="dark" style="font-size: 24rpx;">
-							{{ $api.helper.formatString(language.wholesaleDetail.wholesaleNum, wholesaleView.total_number) }}
-						</dz-tag>
+						<view class="price-box">
+							<view class="price">
+								<text>{{ language.application.moneySymbol }}</text>
+								<text>{{ wholesaleView.product_money }}</text>
+								<view class="price-tip">x 1</view>
+							</view>
+							<dz-tag size="mini" :bg-color="theme.dzBaseColor" :color="theme.dzBaseFontColor" mode="dark" style="font-size: 24rpx;">
+								{{ $api.helper.formatString(language.wholesaleDetail.wholesaleNum, wholesaleView.total_number) }}
+							</dz-tag>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="group-box">
-			<view
-				class="group-title"
-				v-if="wholesaleView.order && wholesaleView.order[0].pay_status == 0 && (wholesaleView.end_time_left && parseInt(wholesaleView.end_time_left) > 0)"
-			>
-				待付款
-			</view>
-			<view class="group-title" v-if="parseInt(wholesaleView.state) == 1 && wholesaleView.end_time_left && parseInt(wholesaleView.end_time_left) > 0">
-				拼单中,还差{{ unWholesaleMemberNumber }}人,剩余
-				<dz-count-down
-					class="dz-m-l-10"
-					:timestamp="wholesaleView.end_time_left"
-					:show-days="false"
-					:color="theme.dzBaseColor"
-					:separator-color="theme.dzBaseColor"
-					:bg-color="'transparent'"
-					@end="wholesaleEnd"
-				></dz-count-down>
-			</view>
-			<view v-if="wholesaleView.end_time_left && wholesaleView.end_time_left < 0">{{ wholesaleView.member_nickname }} - 开团失败</view>
-			<view v-else>{{ wholesaleView.member_nickname }} - {{ wholesaleView.state | stateFilters }}</view>
-			<!-- 团员信息 -->
-			<view class="group-name">
-				<view class="img" v-for="(item, index) in wholesaleMemberList" :key="index">
-					<image :style="{ borderColor: theme.dzBaseColor }" :src="item.member.head_portrait || missingFace" mode=""></image>
-					<view :style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }" v-if="index === 0">团长</view>
-					<view
-						:style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }"
-						v-if="parseInt(item.pay_status) === 1 && index !== 0 && parseInt(item.order_status) !== -4"
+			<view class="group-box">
+				<view
+					class="group-title"
+					v-if="wholesaleView.order && wholesaleView.order[0].pay_status == 0 && (wholesaleView.end_time_left && parseInt(wholesaleView.end_time_left) > 0)"
+				>
+					待付款
+				</view>
+				<view class="group-title" v-if="parseInt(wholesaleView.state) == 1 && wholesaleView.end_time_left && parseInt(wholesaleView.end_time_left) > 0">
+					拼单中,还差{{ unWholesaleMemberNumber }}人,剩余
+					<dz-count-down
+						class="dz-m-l-10"
+						:timestamp="wholesaleView.end_time_left"
+						:show-days="false"
+						:color="theme.dzBaseColor"
+						:separator-color="theme.dzBaseColor"
+						:bg-color="'transparent'"
+						@end="wholesaleEnd"
+					></dz-count-down>
+				</view>
+				<view v-if="wholesaleView.end_time_left && wholesaleView.end_time_left < 0">{{ wholesaleView.member_nickname }} - 开团失败</view>
+				<view v-else>{{ wholesaleView.member_nickname }} - {{ wholesaleView.state | stateFilters }}</view>
+				<!-- 团员信息 -->
+				<view class="group-name">
+					<view class="img" v-for="(item, index) in wholesaleMemberList" :key="index">
+						<image :style="{ borderColor: theme.dzBaseColor }" :src="item.member.head_portrait || missingFace" mode=""></image>
+						<view :style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }" v-if="index === 0">团长</view>
+						<view
+							:style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }"
+							v-if="parseInt(item.pay_status) === 1 && index !== 0 && parseInt(item.order_status) !== -4"
+						>
+							成员
+						</view>
+						<view :style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }" v-if="parseInt(item.pay_status) === 0 && parseInt(item.order_status) !== -4">
+							待付
+						</view>
+					</view>
+					<view class="img" v-for="indexes in unWholesaleMemberNumber" :key="indexes" v-if="parseInt(wholesaleView.state) != 3">
+						<image :style="{ borderColor: theme.dzBaseColor }" :src="missingFace" mode=""></image>
+					</view>
+				</view>
+				<!-- 支付 -->
+				<view class="btn" v-if="wholesalePayShow">
+					<dz-button
+						:border="false"
+						:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+						hover-class="none"
+						shape="circle"
+						@click="pay"
 					>
-						成员
-					</view>
-					<view :style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor }" v-if="parseInt(item.pay_status) === 0 && parseInt(item.order_status) !== -4">
-						待付
-					</view>
+						去支付
+					</dz-button>
 				</view>
-				<view class="img" v-for="indexes in unWholesaleMemberNumber" :key="indexes" v-if="parseInt(wholesaleView.state) != 3">
-					<image :style="{ borderColor: theme.dzBaseColor }" :src="missingFace" mode=""></image>
+				<!--邀请好友-->
+				<view class="btn scale-1" v-if="wholesaleShareShow">
+					<dz-button
+						:border="false"
+						:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+						hover-class="none"
+						shape="circle"
+						open-type="share"
+						@click="share(wholesaleView)"
+					>
+						邀请好友
+					</dz-button>
+				</view>
+				<!--加入拼团-->
+				<view class="btn scale-1 dz-m-t-20" v-if="wholesaleJoinShow">
+					<dz-button
+						:border="false"
+						:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+						hover-class="none"
+						shape="circle"
+						@click="submit(wholesaleView)"
+					>
+						加入拼团
+					</dz-button>
+				</view>
+				<view class="btn" v-if="parseInt(wholesaleView.state) === 2">
+					<dz-button :border="false" :custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }" hover-class="none" shape="circle">
+						开团成功
+					</dz-button>
+				</view>
+				<view class="btn dz-m-t-20">
+					<dz-button
+						:border="false"
+						:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+						hover-class="none"
+						shape="circle"
+						@click="toProfile"
+					>
+						返回用户中心
+					</dz-button>
 				</view>
 			</view>
-			<!-- 支付 -->
-			<view class="btn" v-if="wholesalePayShow">
-				<dz-button
-					:border="false"
-					:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+			<!-- 订单信息 -->
+			<view class="cell-box" v-if="orderDetail.shipping_type && wholesaleView.member_id == userInfo.id">
+				<dz-cell-item center title="下单时间" :arrow="false" :value="wholesaleView.created_at | timeFormat" :border-bottom="false" hover-class="none"></dz-cell-item>
+				<dz-cell-item
+					center
+					title="订单编号"
+					:arrow="false"
+					:value="wholesaleView.order && wholesaleView.order[0].order_sn"
+					:border-bottom="false"
 					hover-class="none"
-					shape="circle"
-					@click="pay"
-				>
-					去支付
-				</dz-button>
-			</view>
-			<!--邀请好友-->
-			<view class="btn scale-1" v-if="wholesaleShareShow">
-				<dz-button
-					:border="false"
-					:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+				></dz-cell-item>
+				<dz-cell-item
+					center
+					title="配送方式"
+					:arrow="false"
+					:value="orderDetail.shipping_type | filterShippingType"
+					:border-bottom="false"
 					hover-class="none"
-					shape="circle"
-					open-type="share"
-					@click="share(wholesaleView)"
-				>
-					邀请好友
-				</dz-button>
-			</view>
-			<!--加入拼团-->
-			<view class="btn scale-1 dz-m-t-20" v-if="wholesaleJoinShow">
-				<dz-button
-					:border="false"
-					:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+				></dz-cell-item>
+				<dz-cell-item center title="快递公司" :arrow="false" :value="orderDetail.company_name || '等待配送'" :border-bottom="false" hover-class="none"></dz-cell-item>
+				<dz-cell-item
+					center
+					title="运费"
+					:arrow="false"
+					:value="$api.helper.formatString(language.orderCreate.price, orderDetail.shipping_money)"
+					:border-bottom="false"
 					hover-class="none"
-					shape="circle"
-					@click="submit(wholesaleView)"
-				>
-					加入拼团
-				</dz-button>
-			</view>
-			<view class="btn" v-if="parseInt(wholesaleView.state) === 2">
-				<dz-button :border="false" :custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }" hover-class="none" shape="circle">
-					开团成功
-				</dz-button>
-			</view>
-			<view class="btn dz-m-t-20">
-				<dz-button
-					:border="false"
-					:custom-style="{ background: theme.dzBaseColor, color: theme.dzBaseFontColor, width: '90%' }"
+				></dz-cell-item>
+				<dz-cell-item
+					center
+					title="发票税费"
+					:arrow="false"
+					:value="$api.helper.formatString(language.orderCreate.price, orderDetail.tax_money)"
+					:border-bottom="false"
 					hover-class="none"
-					shape="circle"
-					@click="toProfile"
-				>
-					返回用户中心
-				</dz-button>
+				></dz-cell-item>
+				<dz-cell-item center title="商品金额" :arrow="false" :value="`￥${wholesaleView.price}`" :border-bottom="false" hover-class="none"></dz-cell-item>
+				<dz-cell-item
+					center
+					title="实付款"
+					:arrow="false"
+					:value="$api.helper.formatString(language.orderCreate.price, orderDetail.pay_money)"
+					:border-bottom="false"
+					:value-style="{ color: theme.dzBaseColor }"
+					hover-class="none"
+				></dz-cell-item>
 			</view>
-		</view>
-		<!-- 订单信息 -->
-		<view class="cell-box" v-if="orderDetail.shipping_type && wholesaleView.member_id == userInfo.id">
-			<dz-cell-item center title="下单时间" :arrow="false" :value="wholesaleView.created_at | timeFormat" :border-bottom="false" hover-class="none"></dz-cell-item>
-			<dz-cell-item
-				center
-				title="订单编号"
-				:arrow="false"
-				:value="wholesaleView.order && wholesaleView.order[0].order_sn"
-				:border-bottom="false"
-				hover-class="none"
-			></dz-cell-item>
-			<dz-cell-item center title="配送方式" :arrow="false" :value="orderDetail.shipping_type | filterShippingType" :border-bottom="false" hover-class="none"></dz-cell-item>
-			<dz-cell-item center title="快递公司" :arrow="false" :value="orderDetail.company_name || '等待配送'" :border-bottom="false" hover-class="none"></dz-cell-item>
-			<dz-cell-item
-				center
-				title="运费"
-				:arrow="false"
-				:value="$api.helper.formatString(language.orderCreate.price, orderDetail.shipping_money)"
-				:border-bottom="false"
-				hover-class="none"
-			></dz-cell-item>
-			<dz-cell-item
-				center
-				title="发票税费"
-				:arrow="false"
-				:value="$api.helper.formatString(language.orderCreate.price, orderDetail.tax_money)"
-				:border-bottom="false"
-				hover-class="none"
-			></dz-cell-item>
-			<dz-cell-item center title="商品金额" :arrow="false" :value="`￥${wholesaleView.price}`" :border-bottom="false" hover-class="none"></dz-cell-item>
-			<dz-cell-item
-				center
-				title="实付款"
-				:arrow="false"
-				:value="$api.helper.formatString(language.orderCreate.price, orderDetail.pay_money)"
-				:border-bottom="false"
-				:value-style="{ color: theme.dzBaseColor }"
-				hover-class="none"
-			></dz-cell-item>
-		</view>
-		<!-- 爆款推荐 -->
-		<view class="product-box">
-			<dz-title v-if="wholesaleList.length > 0" title="猜你喜欢" mode="line" :barColor="theme.dzBaseDisabled"></dz-title>
-			<view class="product-list">
-				<view class="product-item" v-for="(item, listIndex) in wholesaleList" :key="listIndex" @tap="gotoProduct(item.product.id)">
-					<image :src="item.product.picture"></image>
-					<view class="price-text">{{ item.product.name }}</view>
-					<dz-tag size="mini" mode="dark" :bg-color="theme.dzBaseColor" :color="theme.dzBaseFontColor" style="margin:0 0 10rpx 10rpx;">
-						{{ item.num }}{{ language.wholesale.yesGroup }}
-					</dz-tag>
-					<view style="display: flex; align-items: flex-end; padding-left: 10rpx;">
-						<view class="price-box" :style="{ color: theme.dzBaseColor }">
-							<text class="price-l">{{ language.application.moneySymbol }}</text>
-							<text class="price-r">{{ item.product.wholesale_price }}</text>
+			<!-- 爆款推荐 -->
+			<view class="product-box">
+				<dz-title v-if="wholesaleList.length > 0" title="猜你喜欢" mode="line" :barColor="theme.dzBaseDisabled"></dz-title>
+				<view class="product-list">
+					<view class="product-item" v-for="(item, listIndex) in wholesaleList" :key="listIndex" @tap="gotoProduct(item.product.id)">
+						<image :src="item.product.picture"></image>
+						<view class="price-text">{{ item.product.name }}</view>
+						<dz-tag size="mini" mode="dark" :bg-color="theme.dzBaseColor" :color="theme.dzBaseFontColor" style="margin:0 0 10rpx 10rpx;">
+							{{ item.num }}{{ language.wholesale.yesGroup }}
+						</dz-tag>
+						<view style="display: flex; align-items: flex-end; padding-left: 10rpx;">
+							<view class="price-box" :style="{ color: theme.dzBaseColor }">
+								<text class="price-l">{{ language.application.moneySymbol }}</text>
+								<text class="price-r">{{ item.product.wholesale_price }}</text>
+							</view>
+							<view class="price-tip">{{ language.application.moneySymbol }}{{ item.product.market_price || item.product.price }}</view>
 						</view>
-						<view class="price-tip">{{ language.application.moneySymbol }}{{ item.product.market_price || item.product.price }}</view>
 					</view>
 				</view>
+				<dz-empty v-if="loadingStatus == 'nodata'" margin-top="80" :text="noDataText" :src="empty" iconSize="360"></dz-empty>
+				<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" :bg-color="theme.dzBgColor" margin-top="20" margin-bottom="20"></dz-loadmore>
 			</view>
-			<dz-empty v-if="loadingStatus == 'nodata'" margin-top="80" :text="noDataText" :src="empty" iconSize="360"></dz-empty>
-			<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" :bg-color="theme.dzBgColor" margin-top="20" margin-bottom="20"></dz-loadmore>
+			<dz-page-loading :show="pageLoadingShow" :status="pageLoadingStatus" @click="pageLoadingClick"></dz-page-loading>
+			<dz-toast ref="dzToast"></dz-toast>
 		</view>
-		<dz-page-loading :show="pageLoadingShow" :status="pageLoadingStatus" @click="pageLoadingClick"></dz-page-loading>
-		<dz-toast ref="dzToast"></dz-toast>
 	</view>
 </template>
 
@@ -203,7 +220,8 @@ export default {
 			wholesaleList: [],
 			pageLoadingShow: false,
 			pageLoadingStatus: 'loading',
-			orderDetail: {}
+			orderDetail: {},
+			guide: this.$api.assetsConfig.guide
 		};
 	},
 	async onLoad(e) {
@@ -266,7 +284,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState(['userInfo']),
+		...mapState(['userInfo', 'wechatMpScene']),
 		...mapGetters(['hasLogin']),
 		//拼团订单
 		wholesaleMemberList() {
@@ -509,6 +527,7 @@ export default {
 						url = _this.sharePath();
 					},
 					fail(err) {
+						url = _this.sharePath();
 						console.log(err, 2);
 					}
 				});

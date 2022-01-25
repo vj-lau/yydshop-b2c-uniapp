@@ -185,3 +185,27 @@ uni-toast .uni-toast {
 	color: transparent;
 }
 /* #endif */
+
+.mp-scene {
+	position: fixed;
+	padding: 30rpx;
+	bottom: 0;
+	width: 100%;
+	z-index: 2;
+	text-align: right;
+	.mp-weixin {
+		width: 120rpx;
+		height: 120rpx;
+		margin: 0 auto;
+		background-color: #fff;
+		border-radius: 30rpx;
+	}
+	.mp-tip {
+		margin: 30rpx 0;
+		color: #fff;
+	}
+	img {
+		width: 312rpx;
+		height: 200rpx;
+	}
+}

@@ -1,142 +1,154 @@
 <template>
-	<view class="bargain-details">
-		<!-- 砍一砍 -->
-		<dz-navbar :title="language.bargain.bargaiDetailTitle"></dz-navbar>
-		<view class="content">
-			<view class="product-card" @tap="productClick">
-				<view class="title">
-					<image class="img" :src="(brgainLaunchView.baseMember && brgainLaunchView.baseMember.head_portrait) || missingFace"></image>
-					<view class="right">
-						<view class="name">{{ brgainLaunchView.baseMember && brgainLaunchView.baseMember.nickname }}</view>
-						<!-- 我发现了好货,快来帮我砍价 -->
-						<text>{{ language.bargain.bargaiDetailTip }}</text>
-					</view>
-				</view>
-				<view class="product-box" v-if="brgainLaunchView.sku">
-					<image :src="brgainLaunchView.sku.baseProduct.picture"></image>
-					<view class="product-right">
-						<view class="name">{{ brgainLaunchView.sku.baseProduct.name }}</view>
-						<view class="price" :style="{ color: theme.dzBaseColor }">
-							<!-- 可砍至￥ -->
-							<view>{{ language.bargain.bargaiDetail }}{{ language.application.moneySymbol }}{{ brgainLaunchView.min_money }}</view>
-							<text>{{ language.application.moneySymbol }}{{ brgainLaunchView.sku.price }}</text>
+	<view>
+		<view v-if="wechatMpScene != '' && wechatMpScene == 1154">
+			<dz-mask :show="true" :zIndex="1"></dz-mask>
+			<view class="mp-scene">
+				<view class="mp-weixin dz-flex dz-row-center"><dz-icon name="round_link_fill" color="#7A80FC" :size="70"></dz-icon></view>
+				<view class="mp-tip dz-text-center">点击右下角</view>
+				<img :src="guide" />
+			</view>
+		</view>
+		<view v-else class="bargain-details">
+			<!-- 砍一砍 -->
+			<dz-navbar :title="language.bargain.bargaiDetailTitle"></dz-navbar>
+			<view class="content">
+				<view class="product-card" @tap="productClick">
+					<view class="title">
+						<image class="img" :src="(brgainLaunchView.baseMember && brgainLaunchView.baseMember.head_portrait) || missingFace"></image>
+						<view class="right">
+							<view class="name">{{ brgainLaunchView.baseMember && brgainLaunchView.baseMember.nickname }}</view>
+							<!-- 我发现了好货,快来帮我砍价 -->
+							<text>{{ language.bargain.bargaiDetailTip }}</text>
 						</view>
 					</view>
-				</view>
-			</view>
-			<!-- 正在砍价中 -->
-			<view class="status" v-if="brgainLaunchView.state == 1">{{ language.bargain.bargaiDeingNegotiated }}</view>
-			<!-- 砍价失败 -->
-			<view class="status" v-if="brgainLaunchView.state == 3">{{ language.bargain.bargainerror }}</view>
-			<!-- 砍价成功 -->
-			<view class="status" v-if="brgainLaunchView.state == 2">{{ language.bargain.bargainStatusSuccess }}</view>
-			<!-- 已砍99元,还可以9砍元 -->
-			<view class="tip">
-				{{ language.bargain.bargaiDown }}
-				<text style="font-size: 32rpx;margin-left:10rpx;margin-right: 10rpx;">{{ bargain_money }}</text>
-				{{ language.bargain.baragiCanAlsoCut }}
-				<text style="font-size: 36rpx;margin-left:10rpx;margin-right: 10rpx;">{{ brgainLaunchView.surplus_money }}</text>
-				{{ language.bargain.baragiDollar }}
-			</view>
-			<view class="assist-list dz-m-b-60">
-				<!-- 已砍价 -->
-				<view class="title dz-font-32">{{ language.bargain.cutPriceList }}</view>
-				<scroll-view scroll-y style="max-height: 600rpx;">
-					<view class="item" v-for="(item, index) in brgainLaunchView.partake" :key="index">
-						<view class="item-left">
-							<image :src="item.partake.member_head_portrait || missingFace"></image>
-							<view>
-								<view class="name">{{ item.partake.member_nickname }}</view>
-								<text>{{ bargainTip[$api.helper.random(0, 6)].val }}</text>
+					<view class="product-box" v-if="brgainLaunchView.sku">
+						<image :src="brgainLaunchView.sku.baseProduct.picture"></image>
+						<view class="product-right">
+							<view class="name">{{ brgainLaunchView.sku.baseProduct.name }}</view>
+							<view class="price" :style="{ color: theme.dzBaseColor }">
+								<!-- 可砍至￥ -->
+								<view>{{ language.bargain.bargaiDetail }}{{ language.application.moneySymbol }}{{ brgainLaunchView.min_money }}</view>
+								<text>{{ language.application.moneySymbol }}{{ brgainLaunchView.sku.price }}</text>
 							</view>
 						</view>
-						<view class="item-right">
-							<text class="dzicon-iconfont dzicon-flashbuyfill-copy" style="color: #fedcbd;margin-right: 10rpx;"></text>
-							<!-- 砍掉9元 -->
-							<text>{{ language.bargain.bargaiCutOff }}{{ item.bargain_money }}{{ language.bargain.baragiDollar }}</text>
-						</view>
 					</view>
-					<view v-if="brgainLaunchView.partake && !brgainLaunchView.partake.length" class="dz-m-t-20 dz-text-center" style="color: #fff">暂无好友帮砍，去分享吧~</view>
-				</scroll-view>
-			</view>
-			<view class="time" v-if="parseInt(brgainLaunchView.state) === 0 || parseInt(brgainLaunchView.state) === 1">
-				<!-- 还有 -->
-				<text class="dz-m-r-10">{{ language.bargain.thereAre }}</text>
-				<dz-count-down
-					v-if="parseInt(brgainLaunchView.state) === 0"
-					:timestamp="brgainLaunchView.start_time"
-					:show-days="false"
-					separator="zh"
-					:bg-color="theme.dzTypeError"
-					color="#fff"
-					separator-color="#fff"
-				></dz-count-down>
-				<dz-count-down
-					v-if="parseInt(brgainLaunchView.state) === 1"
-					:timestamp="brgainLaunchView.end_time_left"
-					:bg-color="theme.dzTypeError"
-					color="#fff"
-					separator="zh"
-					separator-color="#fff"
-				></dz-count-down>
-				<text class="dz-m-l-10">{{ language.bargain.bargaiDetailfinished }}</text>
-			</view>
-			<dz-button
-				@click="share"
-				v-if="brgainLaunchView.member_id == userInfo.id"
-				open-type="share"
-				:disabled="brgainLaunchView.end_time_left < 0 || brgainLaunchView.state == 2"
-				type="warning"
-				shape="circle"
-				:custom-style="{ marginBottom: '30rpx' }"
-			>
-				{{ language.bargain.bargaiCallFriends }}
-			</dz-button>
-			<dz-button
-				v-if="brgainLaunchView.member_id != userInfo.id"
-				type="warning"
-				:disabled="brgainLaunchView.end_time_left < 0 || brgainLaunchView.state == 2"
-				@click="bargainTap"
-				shape="circle"
-			>
-				{{ language.bargain.bargaiHelpCallFriends }}
-			</dz-button>
-			<dz-button
-				v-if="brgainLaunchView.member_id == userInfo.id && brgainLaunchView.state == 2"
-				type="warning"
-				:disabled="brgainLaunchView.order && brgainLaunchView.order.close_left_time < 0"
-				@click="toPay"
-				shape="circle"
-			>
-				<view v-if="brgainLaunchView.order && parseInt(brgainLaunchView.order.order_status) == 0">
-					<dz-count-down
-						:timestamp="brgainLaunchView.order.close_left_time"
-						:show-days="false"
-						:color="theme.dzBaseFontColor"
-						fontSize="28"
-						:separator-color="theme.dzBaseFontColor"
-						bg-color="#FFC43F"
-						@end="timeOut"
-					></dz-count-down>
-					分钟将关闭支付
 				</view>
-				<bolck v-if="!brgainLaunchView.order">付款领取</bolck>
-				<bolck v-if="brgainLaunchView.order && brgainLaunchView.order.close_left_time < 0">已关闭</bolck>
-				<bolck v-if="brgainLaunchView.order && brgainLaunchView.order.pay_status == 1">订单详情</bolck>
-			</dz-button>
+				<!-- 正在砍价中 -->
+				<view class="status" v-if="brgainLaunchView.state == 1">{{ language.bargain.bargaiDeingNegotiated }}</view>
+				<!-- 砍价失败 -->
+				<view class="status" v-if="brgainLaunchView.state == 3">{{ language.bargain.bargainerror }}</view>
+				<!-- 砍价成功 -->
+				<view class="status" v-if="brgainLaunchView.state == 2">{{ language.bargain.bargainStatusSuccess }}</view>
+				<!-- 已砍99元,还可以9砍元 -->
+				<view class="tip">
+					{{ language.bargain.bargaiDown }}
+					<text style="font-size: 32rpx;margin-left:10rpx;margin-right: 10rpx;">{{ bargain_money }}</text>
+					{{ language.bargain.baragiCanAlsoCut }}
+					<text style="font-size: 36rpx;margin-left:10rpx;margin-right: 10rpx;">{{ brgainLaunchView.surplus_money }}</text>
+					{{ language.bargain.baragiDollar }}
+				</view>
+				<view class="assist-list dz-m-b-60">
+					<!-- 已砍价 -->
+					<view class="title dz-font-32">{{ language.bargain.cutPriceList }}</view>
+					<scroll-view scroll-y style="max-height: 600rpx;">
+						<view class="item" v-for="(item, index) in brgainLaunchView.partake" :key="index">
+							<view class="item-left">
+								<image :src="item.partake.member_head_portrait || missingFace"></image>
+								<view>
+									<view class="name">{{ item.partake.member_nickname }}</view>
+									<text>{{ bargainTip[$api.helper.random(0, 6)].val }}</text>
+								</view>
+							</view>
+							<view class="item-right">
+								<text class="dzicon-iconfont dzicon-flashbuyfill-copy" style="color: #fedcbd;margin-right: 10rpx;"></text>
+								<!-- 砍掉9元 -->
+								<text>{{ language.bargain.bargaiCutOff }}{{ item.bargain_money }}{{ language.bargain.baragiDollar }}</text>
+							</view>
+						</view>
+						<view v-if="brgainLaunchView.partake && !brgainLaunchView.partake.length" class="dz-m-t-20 dz-text-center" style="color: #fff">
+							暂无好友帮砍，去分享吧~
+						</view>
+					</scroll-view>
+				</view>
+				<view class="time" v-if="parseInt(brgainLaunchView.state) === 0 || parseInt(brgainLaunchView.state) === 1">
+					<!-- 还有 -->
+					<text class="dz-m-r-10">{{ language.bargain.thereAre }}</text>
+					<dz-count-down
+						v-if="parseInt(brgainLaunchView.state) === 0"
+						:timestamp="brgainLaunchView.start_time"
+						:show-days="false"
+						separator="zh"
+						:bg-color="theme.dzTypeError"
+						color="#fff"
+						separator-color="#fff"
+					></dz-count-down>
+					<dz-count-down
+						v-if="parseInt(brgainLaunchView.state) === 1"
+						:timestamp="brgainLaunchView.end_time_left"
+						:bg-color="theme.dzTypeError"
+						color="#fff"
+						separator="zh"
+						separator-color="#fff"
+					></dz-count-down>
+					<text class="dz-m-l-10">{{ language.bargain.bargaiDetailfinished }}</text>
+				</view>
+				<dz-button
+					@click="share"
+					v-if="brgainLaunchView.member_id == userInfo.id"
+					open-type="share"
+					:disabled="brgainLaunchView.end_time_left < 0 || brgainLaunchView.state == 2"
+					type="warning"
+					shape="circle"
+					:custom-style="{ marginBottom: '30rpx' }"
+				>
+					{{ language.bargain.bargaiCallFriends }}
+				</dz-button>
+				<dz-button
+					v-if="brgainLaunchView.member_id != userInfo.id"
+					type="warning"
+					:disabled="brgainLaunchView.end_time_left < 0 || brgainLaunchView.state == 2"
+					@click="bargainTap"
+					shape="circle"
+				>
+					{{ language.bargain.bargaiHelpCallFriends }}
+				</dz-button>
+				<dz-button
+					v-if="brgainLaunchView.member_id == userInfo.id && brgainLaunchView.state == 2"
+					type="warning"
+					:disabled="brgainLaunchView.order && brgainLaunchView.order.close_left_time < 0"
+					@click="toPay"
+					shape="circle"
+				>
+					<view v-if="brgainLaunchView.order && parseInt(brgainLaunchView.order.order_status) == 0">
+						<dz-count-down
+							:timestamp="brgainLaunchView.order.close_left_time"
+							:show-days="false"
+							:color="theme.dzBaseFontColor"
+							fontSize="28"
+							:separator-color="theme.dzBaseFontColor"
+							bg-color="#FFC43F"
+							@end="timeOut"
+						></dz-count-down>
+						分钟将关闭支付
+					</view>
+					<bolck v-if="!brgainLaunchView.order">付款领取</bolck>
+					<bolck v-if="brgainLaunchView.order && brgainLaunchView.order.close_left_time < 0">已关闭</bolck>
+					<bolck v-if="brgainLaunchView.order && brgainLaunchView.order.pay_status == 1">订单详情</bolck>
+				</dz-button>
+			</view>
+			<dz-page-loading :show="pageLoadingShow" :satus="pageLoadingStatus" @click="pageLoadingClick"></dz-page-loading>
+			<!-- 砍价提示 -->
+			<dz-modal
+				v-model="barginShow"
+				:mask-close-able="false"
+				title="恭喜"
+				:content="barginText"
+				:confirm-color="theme.dzBaseColor"
+				:async-close="true"
+				@confirm="barginConfirm"
+			></dz-modal>
+			<dz-toast ref="dzToast"></dz-toast>
 		</view>
-		<dz-page-loading :show="pageLoadingShow" :satus="pageLoadingStatus" @click="pageLoadingClick"></dz-page-loading>
-		<!-- 砍价提示 -->
-		<dz-modal
-			v-model="barginShow"
-			:mask-close-able="false"
-			title="恭喜"
-			:content="barginText"
-			:confirm-color="theme.dzBaseColor"
-			:async-close="true"
-			@confirm="barginConfirm"
-		></dz-modal>
-		<dz-toast ref="dzToast"></dz-toast>
 	</view>
 </template>
 
@@ -169,7 +181,8 @@ export default {
 				{ val: this.$api.language.bargain.bargainDetailTip7 }
 			],
 			myShow: true,
-			isSwitchShow: false // 控制砍价提示框
+			isSwitchShow: false, // 控制砍价提示框
+			guide: this.$api.assetsConfig.guide
 		};
 	},
 	async onLoad(e) {
@@ -206,7 +219,7 @@ export default {
 		uni.$off('bargainCreate');
 	},
 	computed: {
-		...mapState(['userInfo']),
+		...mapState(['userInfo', 'wechatMpScene']),
 		...mapGetters(['hasLogin']),
 		bargain_money() {
 			let money = 0;
@@ -312,6 +325,7 @@ export default {
 						url = _this.sharePath();
 					},
 					fail(err) {
+						url = _this.sharePath();
 						console.log(err, 2);
 					}
 				});

@@ -405,9 +405,12 @@ function copy(content) {
 	return result;
 	// #endif
 	// #ifdef MP
-	// uni.setClipboardData({
-	// 	data: content
-	// });
+	uni.setClipboardData({
+		data: content,
+		success: function() {
+			uni.hideToast()
+		}
+	});
 	return true;
 	// #endif
 	// #ifdef APP-PLUS

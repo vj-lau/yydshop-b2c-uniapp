@@ -518,11 +518,13 @@ export default {
 				(this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_success || this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_fail)
 			) {
 				const _this = this;
+				let tmplIds = [];
+				// 拼团成功
+				this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_success && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_success)
+				// 拼团失败
+				this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_fail && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_fail)
 				wx.requestSubscribeMessage({
-					tmplIds: [
-						this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_success, //   拼团成功
-						this.$api.shopSetting.notify_miniprogram_sub.order_wholesale_fail //  拼团失败
-					],
+					tmplIds: tmplIds,
 					success: res => {
 						url = _this.sharePath();
 					},

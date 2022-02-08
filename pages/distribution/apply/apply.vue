@@ -258,12 +258,15 @@ export default {
 					this.$api.shopSetting.notify_miniprogram_sub.promoter_level_change)
 			) {
 				const _this = this;
+				let tmplIds = [];
+				// 分销商审核通知
+				this.$api.shopSetting.notify_miniprogram_sub.promoter_audit && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.promoter_audit);
+				// 成为分销商通知
+				this.$api.shopSetting.notify_miniprogram_sub.promoter_done && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.promoter_done);
+				// 分销商等级变更通知
+				this.$api.shopSetting.notify_miniprogram_sub.promoter_level_change && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.promoter_level_change);
 				wx.requestSubscribeMessage({
-					tmplIds: [
-						this.$api.shopSetting.notify_miniprogram_sub.promoter_audit, //   分销商审核通知
-						this.$api.shopSetting.notify_miniprogram_sub.promoter_done, //   成为分销商通知
-						this.$api.shopSetting.notify_miniprogram_sub.promoter_level_change //   分销商等级变更通知
-					],
+					tmplIds: tmplIds,
 					success: res => {
 						_this.$api.router.push({
 							route: _this.$api.routesConfig.distributionApplyAgncy

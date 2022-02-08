@@ -276,11 +276,13 @@ export default {
 					(this.$api.shopSetting.notify_miniprogram_sub.order_consign || this.$api.shopSetting.notify_miniprogram_sub.order_signin)
 				) {
 					const _this = this;
+					let tmplIds = [];
+					// 订单发货
+					this.$api.shopSetting.notify_miniprogram_sub.order_consign && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_consign);
+					// 订单签收
+					this.$api.shopSetting.notify_miniprogram_sub.order_signin && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_signin);
 					wx.requestSubscribeMessage({
-						tmplIds: [
-							this.$api.shopSetting.notify_miniprogram_sub.order_consign, //   订单发货
-							this.$api.shopSetting.notify_miniprogram_sub.order_signin //  订单签收
-						],
+						tmplIds: tmplIds,
 						success: res => {
 							_this.toOrder();
 						},

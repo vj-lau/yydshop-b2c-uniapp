@@ -316,11 +316,13 @@ export default {
 				(this.$api.shopSetting.notify_miniprogram_sub.order_bargain_success || this.$api.shopSetting.notify_miniprogram_sub.order_bargain_fail)
 			) {
 				const _this = this;
+				let tmplIds = [];
+				// 砍价成功
+				this.$api.shopSetting.notify_miniprogram_sub.order_bargain_success && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_bargain_success);
+				// 砍价失败
+				this.$api.shopSetting.notify_miniprogram_sub.order_bargain_fail && tmplIds.push(this.$api.shopSetting.notify_miniprogram_sub.order_bargain_fail);
 				wx.requestSubscribeMessage({
-					tmplIds: [
-						this.$api.shopSetting.notify_miniprogram_sub.order_bargain_success, //   砍价成功
-						this.$api.shopSetting.notify_miniprogram_sub.order_bargain_fail //  砍价失败
-					],
+					tmplIds: tmplIds,
 					success: res => {
 						url = _this.sharePath();
 					},

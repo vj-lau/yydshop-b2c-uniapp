@@ -121,7 +121,8 @@
     //     }
     // }
     "mp-alipay" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "appid" : ""
     },
     "mp-baidu" : {
         "usingComponents" : true

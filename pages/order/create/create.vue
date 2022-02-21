@@ -545,7 +545,7 @@ export default {
 		// 计算实付金额
 		realAmount() {
 			let isDiscoDnt = false;
-			if ( this.data && (this.data.type == 'discount' || this.data.type == 'buy_now') && this.couponItem.type == 1) {
+			if ( this.data && (this.data.type == 'discount' || this.data.type == 'buy_now' || this.data.type == 'cart') && this.couponItem.type == 1) {
 				isDiscoDnt = true;
 			}
 			let realAmount =

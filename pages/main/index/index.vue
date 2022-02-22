@@ -235,7 +235,7 @@
 					<!-- 广告 -->
 					<view
 						v-if="item.component == 'dz-banner'"
-						class="dz-relative"
+						class="dz-relative dz-banner"
 						:style="{
 							overflow: 'hidden',
 
@@ -472,8 +472,8 @@
 						></shop-mplive>
 					</view>
 					<!-- #endif -->
-					<view style="height: 2rpx;"></view>
 				</view>
+				<view style="height: 2rpx;"></view>
 			</view>
 			<!--ICP备案-->
 			<!--#ifdef H5-->
@@ -1242,6 +1242,12 @@ page,
 				}
 			}
 		}
+	}
+}
+
+.dz-banner {
+	image{
+		display: inline-block;
 	}
 }
 

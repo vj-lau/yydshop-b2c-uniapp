@@ -258,7 +258,7 @@
 					<!-- 广告 -->
 					<view
 						v-if="item.component == 'dz-banner'"
-						class="dz-relative"
+						class="dz-relative dz-banner"
 						:style="{
 							overflow: 'hidden',
 
@@ -512,8 +512,8 @@
 						></shop-mplive>
 					</view>
 					<!-- #endif -->
-					<view style="height: 2rpx;"></view>
 				</view>
+				<view style="height: 2rpx;"></view>
 			</view>
 		</view>
 		<!-- 返回顶部 -->
@@ -1058,3 +1058,11 @@ page,
 }
 </style>
 <!-- #endif -->
+
+<style lang="scss">
+.dz-banner {
+	image{
+		display: inline-block;
+	}
+}
+</style>

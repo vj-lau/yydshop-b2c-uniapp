@@ -94,7 +94,7 @@
 				<!-- 广告 -->
 				<view
 					v-if="item.component == 'dz-banner'"
-					class="dz-relative"
+					class="dz-relative dz-banner"
 					:style="{
 						marginTop: `-${parseInt(item.props.pushTop) * 2}rpx`,
 						padding: `${parseInt(item.props.paddingTop) * 2}rpx ${parseInt(item.props.leftRight) * 2}rpx ${parseInt(item.props.paddingBottom) * 2}rpx`
@@ -936,6 +936,13 @@ export default {
 	color: $dz-main-color;
 	display: flex;
 }
+
+.dz-banner {
+	image{
+		display: inline-block;
+	}
+}
+
 // 积分签到弹窗
 .popup-box {
 	padding: 40rpx;

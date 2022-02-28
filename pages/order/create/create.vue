@@ -724,11 +724,7 @@ export default {
 			this.currentShippingType = e[0];
 			if (this.currentShippingType.value == 2) {
 				//自提
-				if (parseFloat(this.realAmount) > parseFloat(this.orderDetail.pickup_point_config.pickup_point_freight)) {
-					this.shippingMoney = 0;
-				} else {
-					this.shippingMoney = parseFloat(this.orderDetail.pickup_point_config.pickup_point_fee) || 0;
-				}
+				this.shippingMoney = 0;
 			} else {
 				//物流配送
 				if (this.shippingCompany.length > 0) {

@@ -2,12 +2,12 @@
 	<view>
 		<dz-navbar :title="title"></dz-navbar>
 		<view class="content">
-			<view class="banner" v-if="discountProduct.length > 0"><dz-image :src="banner" width="100%" height="320"></dz-image></view>
-			<view class="product-card" v-if="discountProduct.length > 0">
+			<view class="banner" v-if="discountProduct.length"><dz-image :src="banner" width="100%" height="320"></dz-image></view>
+			<view class="product-card" v-if="discountProduct.length">
 				<view class="title">{{ language.discount.localCommodities }}</view>
 				<view class="item" v-for="(item, index) in discountProduct" :key="index" @tap="puy(item)">
-					<view class="image"><dz-image :src="item.product.picture" width="180" height="180" borderRadius="12"></dz-image></view>
-					<view class="right">
+					<view v-if="item.product" class="image"><dz-image :src="item.product.picture" width="180" height="180" borderRadius="12"></dz-image></view>
+					<view  v-if="item.product" class="right">
 						<view>
 							<view class="name">{{ item.product.name }}</view>
 							<view class="tip">{{ item.product.sketch }}</view>
@@ -89,11 +89,11 @@ export default {
 				})
 				.then(res => {
 					this.loadingStatus = res.data.length === this.$api.appConfig.pageSize ? 'loadmore' : 'nomore';
-					this.discountProduct = [...this.discountProduct, res.data];
+					this.discountProduct = [...this.discountProduct, ...res.data];
 					if (this.page == 1 && res.data.length == 0) {
 						this.loadingStatus = 'nodata';
+						
 					}
-					this.discountProduct = res.data;
 				})
 				.catch(err => {
 					this.loadingStatus = 'loadmore';

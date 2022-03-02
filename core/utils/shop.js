@@ -103,6 +103,14 @@ function advNavigate(type, id, advId, toType) {
 				};
 			}
 			break;
+		case 'custom': //自定义链接
+			if ($mHelper.isNumber(id)) {
+				page = $mRoutesConfig.customPage;
+				param = {
+					code: id
+				};
+			}
+			break;
 		default:
 			break;
 	}

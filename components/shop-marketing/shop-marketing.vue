@@ -96,7 +96,7 @@
 											{{ marketingType == 'dz-discount' ? $api.helper.toFloat(item.price).toFixed(2) : $api.helper.toFloat(item.market_price).toFixed(2) }}
 										</text>
 									</view>
-									<view>
+									<view v-if="propsConfig.buttonShow == 1">
 										<dz-button
 											:plain="true"
 											:border="false"

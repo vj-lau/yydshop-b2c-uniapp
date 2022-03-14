@@ -447,7 +447,7 @@
 						></dz-article>
 					</view>
 					<!-- 营销模块 -->
-					<view v-if="marketingType.includes(item.component)">
+					<view v-if="marketingType.includes(item.component) && item.data.length">
 						<shop-marketing
 							:props-config="item.props"
 							:title="item.props.title"

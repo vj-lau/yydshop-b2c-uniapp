@@ -445,7 +445,7 @@
 						></dz-article>
 					</view>
 					<!-- 文章列表 -->
-					<view v-if="item.component == 'dz-article'">
+					<view v-if="item.component == 'dz-article' && item.data.length">
 						<dz-article
 							:list="item.data"
 							:mode="item.props.mode"
@@ -487,7 +487,7 @@
 						></dz-position>
 					</view>
 					<!-- 营销模块 -->
-					<view v-if="marketingType.includes(item.component)">
+					<view v-if="marketingType.includes(item.component) && item.data.length">
 						<shop-marketing
 							:props-config="item.props"
 							:title="item.props.title"

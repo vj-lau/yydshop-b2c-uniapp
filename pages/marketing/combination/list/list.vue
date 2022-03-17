@@ -211,7 +211,8 @@ export default {
 			shopItemInfo: {}, //存放要和选中的值进行匹配的数据
 			selectArr: [], //存放被选中的值
 			subIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
-			selectshop: {} //存放最后选中的商品
+			selectshop: {} ,//存放最后选中的商品
+			specChildList: []
 		};
 	},
 	async onLoad(e) {
@@ -293,7 +294,7 @@ export default {
 			if (this.currentProduct.data) {
 				this.selectSku(this.specIdsFormat(this.currentProduct.data, this.specChildList));
 			}
-			this.popupShow = true;
+			this.popupShow = true
 		},
 		// 初始化
 		init() {
@@ -639,7 +640,7 @@ export default {
 	z-index: 10;
 	bottom: 0;
 	left: 0;
-	padding-bottom: env(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 }
 
 .dz-safearea-bottom {

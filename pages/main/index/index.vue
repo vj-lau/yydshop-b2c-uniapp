@@ -657,7 +657,7 @@ export default {
 	},
 	onShow() {
 		// #ifdef APP-PLUS
-		// this.checkUpdate();
+		this.checkUpdate();
 		// #endif
 		if (this.pageLoadingStatus == 'error' && this.pageLoadingShow) {
 			this.getIndex();
@@ -713,7 +713,7 @@ export default {
 				});
 				if (res.data) {
 					//验证跳过版本
-					let jumpVersion = uni.getStorageSync('jumpUpdateVersion');
+					let jumpVersion = uni.getStorageSync('jumpUpdateVersion') || '1.0.0';
 					let isUpdate = this.$api.helper.compareVersion(res.data.version, jumpVersion);
 					if (isUpdate) {
 						let updateData = {

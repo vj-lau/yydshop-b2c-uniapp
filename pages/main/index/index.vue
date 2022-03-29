@@ -626,6 +626,7 @@ export default {
 			activeCurrent: '',
 			showPageCopyright: false,
 			guide: this.$api.assetsConfig.guide,
+			isLoadingProduct: false,
 			productConfig: {},
 			page: 1,
 			productList: [],
@@ -725,7 +726,7 @@ export default {
 		this.getIndex();	
 	},
 	onReachBottom() {
-		if (this.loadingStatus == 'nodata' || this.loadingStatus == 'nomore' || JSON.stringify(this.productConfig) == '{}') return;
+		if (!this.isLoadingProduct || this.loadingStatus == 'nodata' || this.loadingStatus == 'nomore' || JSON.stringify(this.productConfig) == '{}') return;
 		this.page++;
 		if(this.productConfig.productType != 'like') {
 			this.getProductList(); 
@@ -849,11 +850,8 @@ export default {
 					if (this.componentDiy.length > 0) {
 						if (this.componentDiy[this.componentDiy.length - 1].component == 'dz-falls-flow-product') {
 							this.productConfig = this.componentDiy[this.componentDiy.length - 1].props
-							if(this.productConfig.productType != 'like') {
-								this.getProductList(); 
-							}else {
-								this.getGuessYouLikeList()
-							}	
+							this.productList = this.componentDiy[this.componentDiy.length - 1].data
+							this.isLoadingProduct = this.productList.length ? true : false	
 						}
 						const search = this.componentDiy.filter(v => v.component == 'dz-search');
 						if (search && search.length) {

@@ -255,6 +255,53 @@
 							></shop-product-three>
 						</block>
 					</view>
+					<!-- 瀑布流商品 -->
+					<view v-if="item.component == 'dz-falls-flow-product' && productList.length">
+						<block v-if="item.isList == 1 || item.isList == 2">
+							<shop-product-list
+								:list="productList"
+								:theme="theme"
+								:isList="item.isList == 1 ? true : false"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:cart="item.props.cart"
+								:market-price-show="item.props.marketPriceShow"
+							></shop-product-list>
+						</block>
+						
+						<block v-if="item.isList == 3">
+							<shop-product-max
+								:list="productList"
+								:theme="theme"
+								:defaultList="item.props.list"
+								:dataSource="item.props.dataSource"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:max-height="parseInt(item.props.maxHeight ? item.props.maxHeight : 160) * 2"
+								:cart="item.props.cart"
+								:market-price-show="item.props.marketPriceShow"
+							></shop-product-max>
+						</block>
+						<block v-if="item.isList == 4">
+							<shop-product-three
+								:list="productList"
+								:theme="theme"
+								:defaultList="item.props.list"
+								:dataSource="item.props.dataSource"
+								:radius="parseInt(item.props.radius) * 2"
+								:left-right="parseInt(item.props.leftRight) * 2"
+								:top-bottom="parseInt(item.props.topBottom) * 2"
+								:market-price-show="item.props.marketPriceShow"
+								:clearance="parseInt(item.props.clearance) * 2"
+							></shop-product-three>
+						</block>
+						<block v-if="index == componentDiy.length - 1">
+							<dz-empty v-if="loadingStatus == 'nodata'" margin-top="60" :src="empty" text="暂无数据" iconSize="360"></dz-empty>
+							<dz-loadmore v-if="loadingStatus != 'nodata'" :status="loadingStatus" margin-top="20" margin-bottom="20"></dz-loadmore>
+						</block>
+					</view>
 					<!-- 广告 -->
 					<view
 						v-if="item.component == 'dz-banner'"
@@ -562,7 +609,12 @@ export default {
 			sessionFrom: '',
 			isLoading: false,
 			activeCurrent: '',
-			pageType: ''
+			pageType: '',
+			productConfig: {},
+			page: 1,
+			productList: [],
+			loadingStatus: 'loading',
+			empty: this.$api.assetsConfig.empty,
 		};
 	},
 
@@ -592,7 +644,18 @@ export default {
 		}
 	},
 	onPullDownRefresh() {
+		this.page = 1;
+		this.productList.length = 0;
 		this.getInfoData();
+	},
+	onReachBottom() {
+		if (this.loadingStatus == 'nodata' || this.loadingStatus == 'nomore' || JSON.stringify(this.productConfig) == '{}') return;
+		this.page++;
+		if(this.productConfig.productType != 'like') {
+			this.getProductList(); 
+		}else {
+			this.getGuessYouLikeList()
+		}	
 	},
 	onPageScroll(e) {
 		this.scrollTop = e.scrollTop;
@@ -686,6 +749,14 @@ export default {
 						this.authsType = '';
 					}
 					if (this.componentDiy.length) {
+						if (this.componentDiy[this.componentDiy.length - 1].component == 'dz-falls-flow-product') {
+							this.productConfig = this.componentDiy[this.componentDiy.length - 1].props
+							if(this.productConfig.productType != 'like') {
+								this.getProductList(); 
+							}else {
+								this.getGuessYouLikeList()
+							}	
+						}
 						this.componentDiy.forEach((item, idnex) => {
 							if (item.component == 'dz-article-tabs' && item.data.length) {
 								if (item.props.dataSource == 'manual' && item.props.list.some(item => item.id == '9999999')) {
@@ -723,7 +794,65 @@ export default {
 			}
 			uni.stopPullDownRefresh();
 		},
-
+		async getProductList() {
+			this.loadingStatus = 'loading';
+			const params = {};
+			if(this.productConfig.cate.cate_id) {
+				params.cate_id = this.productConfig.cate.cate_id;
+			}
+			switch(this.productConfig.productType) {
+				case 'is_new':
+				params.is_new = this.productConfig.is_new;
+				break
+				case 'is_recommend':
+				params.is_recommend = this.productConfig.is_recommend;
+				break
+				case 'is_hot':
+				params.is_hot = this.productConfig.is_hot;
+				break
+			}
+			await this.$api.http
+				.get(this.$api.apiShop.productList, {
+					params: {
+						...params,
+						page: this.page,
+						page_size: this.productConfig.pageSize
+					}
+				})
+				.then(async res => {
+					this.loadingStatus = res.data.length == this.productConfig.pageSize ? 'loadmore' : 'nomore';
+					this.productList = [...this.productList, ...res.data];
+					if (this.page == 1 && res.data.length == 0) {
+						this.loadingStatus = 'nodata';
+					}
+				})
+				.catch(err => {
+					this.loadingStatus = 'loadmore';
+				});
+			uni.stopPullDownRefresh();
+		},
+		// 猜你喜欢
+		async getGuessYouLikeList() {
+			this.loadingStatus = 'loading';
+			await this.$api.http
+				.get(this.$api.apiShop.guessYouLikeList, {
+					params: {
+						page: this.page,
+						page_size: this.productConfig.pageSize
+					}
+				})
+				.then(res => {
+					this.loadingStatus = res.data.length === this.productConfig.pageSize ? 'loadmore' : 'nomore';
+					this.productList = [...this.productList, ...res.data];
+					if (this.page == 1 && res.data.length == 0) {
+						this.loadingStatus = 'nodata';
+					}
+				})
+				.catch(err => {
+					this.loadingStatus = 'loadmore';
+				});
+			uni.stopPullDownRefresh();
+		},
 		tabsChange(e, index) {
 			this.isLoading = true;
 			let item = this.componentDiy[index];

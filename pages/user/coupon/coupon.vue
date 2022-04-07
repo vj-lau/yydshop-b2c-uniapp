@@ -35,11 +35,11 @@
 								)
 							}}
 						</view>
-						<text class="dz-font-24 dz-color-9 dz-m-r-10">{{ parseInt(item.range_type) === 1 ? '全场商品可用' : '部分商品可用' }}</text>
+						<text class="dz-font-24 dz-color-9 dz-m-r-10">{{ parseInt(item.couponType.range_type) === 1 ? '全场商品可用' : '部分商品可用' }}</text>
 						<dz-tag
 							class="dz-m-t-10"
 							:show="parseInt(item.couponType.end_time ? item.couponType.end_time : item.end_time) > parseInt(new Date().getTime() / 1000)"
-							:text="`有效期为${$api.helper.timeDayDiff(parseInt(new Date().getTime() / 1000), item.couponType.end_time ? item.couponType.end_time : item.end_time)}天`"
+							:text="`有效期为${$api.helper.timeDayDiff(item.couponType.start_time, item.couponType.end_time ? item.couponType.end_time : item.end_time)}天`"
 							type="info"
 							size="mini"
 							bgColor="#f3f4f6"

@@ -30,7 +30,7 @@
 							{{
 								$api.helper.formatString(
 									language.product.couponUseRange,
-									$api.helper.timeFormat(item.couponType.start_time, 'yyyy-mm-dd'),
+									$api.helper.timeFormat(item.couponType.start_time ? item.couponType.start_time : item.start_time, 'yyyy-mm-dd'),
 									$api.helper.timeFormat(item.couponType.end_time ? item.couponType.end_time : item.end_time, 'yyyy-mm-dd')
 								)
 							}}
@@ -39,7 +39,7 @@
 						<dz-tag
 							class="dz-m-t-10"
 							:show="parseInt(item.couponType.end_time ? item.couponType.end_time : item.end_time) > parseInt(new Date().getTime() / 1000)"
-							:text="`有效期为${$api.helper.timeDayDiff(item.couponType.start_time, item.couponType.end_time ? item.couponType.end_time : item.end_time)}天`"
+							:text="`有效期为${$api.helper.timeDayDiff(item.couponType.start_time ? item.couponType.start_time : item.start_time, item.couponType.end_time ? item.couponType.end_time : item.end_time)}天`"
 							type="info"
 							size="mini"
 							bgColor="#f3f4f6"

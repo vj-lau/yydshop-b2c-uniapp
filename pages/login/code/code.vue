@@ -206,7 +206,7 @@ export default {
 			// #ifdef APP-PLUS
 			let platform = this.$api.systemInfo.platform;
 			if (platform == 'ios') {
-				formData.group = 'iOS';
+				formData.group = 'ios';
 			} else if (platform == 'android') {
 				formData.group = 'android';
 			} else {

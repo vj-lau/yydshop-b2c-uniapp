@@ -679,7 +679,7 @@
 			<!--商品说明-->
 			<view class="dz-discount-box dz-radius-all dz-mtop">
 				<!--优惠券-->
-				<view class="dz-list-cell" v-if="product.canReceiveCoupon && product.canReceiveCoupon.length > 0 && product.canReceiveCoupon.every(item => parseInt(item.is_show) == 1)""  @tap="coupon">
+				<view class="dz-list-cell" v-if="isCoupon" @tap="coupon">
 					<view class="dz-bold dz-cell-title">{{ language.product.coupon }}</view>
 					<view class="dz-flex-center">
 						<view style="line-height: 48rpx;">
@@ -1931,6 +1931,9 @@ export default {
 	},
 	computed: {
 		...mapState(['cartNum', 'customerServiceUnread', 'shopSetting', 'userInfo']),
+		isCoupon() {
+			return this.product.canReceiveCoupon && this.product.canReceiveCoupon.length > 0 && this.product.canReceiveCoupon.some(item => parseInt(item.is_show) == 1)
+		},
 		//计算购买按钮是否不可用
 		buyBtnDisabled() {
 			if (Object.keys(this.product).length === 0) {
